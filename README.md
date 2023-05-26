@@ -9,5 +9,5 @@ GOAD域渗透靶场,应该是目前最好的靶场,多次在HTB靶机上看到�
 
 ### 参考连接
 
-<https://www.qusec.cn/posts/G0AD/>
+<https://www.qusec.cn/posts/G0AD/></br>
 <https://www.qusec.cn/posts/GOAD/>
