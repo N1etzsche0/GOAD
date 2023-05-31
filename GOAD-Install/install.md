@@ -101,7 +101,7 @@ ubuntu@ctf:~$vagrant snapshot save initial-setup
 
 ### 失败经验
 
-我在服务器上使用[官方文档](https://github.com/Orange-Cyberdefense/GOAD)中的用docker创建运行ansible,总是会停止在某个阶段,原因未知
+在服务器上按照[官方文档](https://github.com/Orange-Cyberdefense/GOAD)中的用docker创建并运行ansible,总是会停止在某个阶段,原因未知
 
 ```bash
 sudo docker build -t goadansible .
