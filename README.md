@@ -10,7 +10,11 @@ GOAD域渗透靶场,应该是目前最好的靶场,我曾多次在HTB靶机上�
 
 计划在暑假结束前打通GOAD靶场,对域渗透有个清晰的认识
 
-### 参考连接
+## 导航
+
+[GOAD安装篇](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Install/install.md)
+
+## 参考连接
 
 <https://www.qusec.cn/posts/G0AD/>
 
