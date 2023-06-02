@@ -12,9 +12,9 @@ GOAD域渗透靶场,应该是目前最好的靶场,我曾多次在HTB靶机上�
 
 ## 导航
 
-[GOAD安装篇](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Install/install.md)
+[GOAD安装篇](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part1-Install/GOAD-Install.md)
 
-## 参考连接
+## 参考
 
 <https://www.qusec.cn/posts/G0AD/>
 

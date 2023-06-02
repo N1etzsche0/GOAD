@@ -61,9 +61,9 @@ ansible-playbook main.yml
 
 ### 测试与备份
 
-使用socks代理,进行测试
+使用socks代理,也可以参考[KALI安装篇](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part1-Install/KALI-Install.md)搭建KALI攻击机进行测试
 
-服务器端启动 chisel 服务端
+服务器端启动chisel服务端
 
 ```bash
 ubuntu@ctf:~$./chisel server -v -p port --socks5
