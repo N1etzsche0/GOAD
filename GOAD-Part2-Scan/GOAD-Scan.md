@@ -1,11 +1,15 @@
 # GOAD 侦查和扫描
 
 ## 枚举网络
+
 ### CME侦查
+
 使用crackmapexec(cme)扫描netbios协议,可以**快速获取**所有 Windows机器 IP、名称和域的
+
 ```bash
 crackmapexec smb 192.168.56.0/24 
 ```
+
 ```bash
 SMB         192.168.56.12   445    MEEREEN          [*] Windows Server 2016 Standard Evaluation 14393 x64 (name:MEEREEN) (domain:essos.local) (signing:True) (SMBv1:True)
 SMB         192.168.56.10   445    KINGSLANDING     [*] Windows 10.0 Build 17763 x64 (name:KINGSLANDING) (domain:sevenkingdoms.local) (signing:True) (SMBv1:False)
@@ -13,16 +17,17 @@ SMB         192.168.56.11   445    WINTERFELL       [*] Windows 10.0 Build 17763
 SMB         192.168.56.22   445    CASTELBLACK      [*] Windows 10.0 Build 17763 x64 (name:CASTELBLACK) (domain:north.sevenkingdoms.local) (signing:False) (SMBv1:False)
 SMB         192.168.56.23   445    BRAAVOS          [*] Windows Server 2016 Standard Evaluation 14393 x64 (name:BRAAVOS) (domain:essos.local) (signing:False) (SMBv1:True)
 ```
+
 我们现在知道有 3 个域：
 
 * north.sevenkingdoms.local (2 ip)
-    * 192.168.56.22 CASTELBLACK(Windows server 2019)(signing false)
-    * 192.168.56.11 WINTERFELL(Windows server 2019)
+  * 192.168.56.22 CASTELBLACK(Windows server 2019)(signing false)
+  * 192.168.56.11 WINTERFELL(Windows server 2019)
 * sevenkingdoms.local (1 ip)
-    * 192.168.56.10 KINGSLANDING(Windows server 2019)
+  * 192.168.56.10 KINGSLANDING(Windows server 2019)
 * essos.local (2 ip)
-    * 192.168.56.23 BRAAVOS(Windows server 2016)(signing false)
-    * 192.168.56.12 MEEREEN(Windows server 2019)
+  * 192.168.56.23 BRAAVOS(Windows server 2016)(signing false)
+  * 192.168.56.12 MEEREEN(Windows server 2019)
 
 有3个域，所以必须存在3个DC,微软默认将DC的smb签名设置为True
 
@@ -34,51 +39,60 @@ SMB是一种网络文件共享协议
 因此，SMB需要计算机或服务器上的网络端口才能与其他系统通信
 SMB使用IP端口:139或445
 
-
 * 端口 139：SMB最初使用端口139在NetBIOS之上运行NetBIOS是一个较旧的传输层，它允许Windows计算机在同一网络上相互通信
 
 * 端口 445：更高版本的SMB(在Windows2000之后)开始在TCP堆栈之上使用端口445,使用TCP允许SMB通过Internet工作
 
 ### 寻找域控
-通过使用nslookup查询dns来枚举DC的IP
-```bash
-nslookup -type=srv _ldap._tcp.dc._msdcs.north.sevenkingdoms.local 192.168.56.10
-```
-```bash
-Server:		192.168.56.10
-Address:	192.168.56.10#53
 
-_ldap._tcp.dc._msdcs.sevenkingdoms.local	service = 0 100 389 kingslanding.sevenkingdoms.local.
-```
+通过使用nslookup查询dns来枚举DC的IP
+
 ```bash
 nslookup -type=srv _ldap._tcp.dc._msdcs.north.sevenkingdoms.local 192.168.56.10
 ```
+
 ```bash
-Server:		192.168.56.10
-Address:	192.168.56.10#53
+Server:  192.168.56.10
+Address: 192.168.56.10#53
+
+_ldap._tcp.dc._msdcs.sevenkingdoms.local service = 0 100 389 kingslanding.sevenkingdoms.local.
+```
+
+```bash
+nslookup -type=srv _ldap._tcp.dc._msdcs.north.sevenkingdoms.local 192.168.56.10
+```
+
+```bash
+Server:  192.168.56.10
+Address: 192.168.56.10#53
 
 Non-authoritative answer:
-_ldap._tcp.dc._msdcs.north.sevenkingdoms.local	service = 0 100 389 winterfell.north.sevenkingdoms.local.
+_ldap._tcp.dc._msdcs.north.sevenkingdoms.local service = 0 100 389 winterfell.north.sevenkingdoms.local.
 
 Authoritative answers can be found from:
-winterfell.north.sevenkingdoms.local	internet address = 192.168.56.11
-winterfell.north.sevenkingdoms.local	internet address = 10.0.2.15
+winterfell.north.sevenkingdoms.local internet address = 192.168.56.11
+winterfell.north.sevenkingdoms.local internet address = 10.0.2.15
 ```
+
 ```bash
 nslookup -type=srv _ldap._tcp.dc._msdcs.essos.local 192.168.56.10 
 ```
+
 ```bash
-Server:		192.168.56.10
-Address:	192.168.56.10#53
+Server:  192.168.56.10
+Address: 192.168.56.10#53
 
 Non-authoritative answer:
-_ldap._tcp.dc._msdcs.essos.local	service = 0 100 389 meereen.essos.local.
+_ldap._tcp.dc._msdcs.essos.local service = 0 100 389 meereen.essos.local.
 
 Authoritative answers can be found from:
-meereen.essos.local	internet address = 192.168.56.12
+meereen.essos.local internet address = 192.168.56.12
 ```
+
 ### 设置/etc/hosts和kerberos
+
 设置/etc/hosts文件来配置DNS
+
 ```bash
 192.168.56.10   sevenkingdoms.local kingslanding.sevenkingdoms.local kingslanding
 192.168.56.11   winterfell.north.sevenkingdoms.local north.sevenkingdoms.local winterfell
@@ -86,16 +100,22 @@ meereen.essos.local	internet address = 192.168.56.12
 192.168.56.22   castelblack.north.sevenkingdoms.local castelblack
 192.168.56.23   braavos.essos.local braavos
 ```
+
 安装Linux kerberos客户端
+
 ```bash
 sudo apt install krb5-user
 ```
+
 设置如下
+
 ```bash
 realm: essos.local
 servers: meereen.essos.local
 ```
+
 配置/etc/krb5.conf
+
 ```bash
 [libdefaults]
   default_realm = essos.local
@@ -119,17 +139,23 @@ servers: meereen.essos.local
     }
 ......
 ```
+
 如果已经安装了 krb5-user，我们可以使用(dpkg-reconfigure 或通过修改/etc/krb5.conf)重新配置它
+
 ```bash
 dpkg-reconfigure krb5-config
 ```
+
 现在已在环境中设置好了kerberos，我们将尝试是否可以为用户获取 TGT(假设已知用户密码)
 
 使用impacket/examples中的getTGT脚本
+
 ```bash
 impacket-getTGT essos.local/khal.drogo:horse
 ```
+
 设置环境变量
+
 ```bash
 export KRB5CCNAME=khal.drogo.ccache
 impacket-smbclient -k @braavos.essos.local
@@ -165,29 +191,38 @@ drw-rw-rw-          0  Wed May 31 03:15:37 2023 Users
 drw-rw-rw-          0  Wed May 31 02:47:28 2023 Windows
 # Bye!
 ```
+
 kerberos设置很好,取消Ticket
+
 ```bash
 unset KRB5CCNAME
 ```
+
 对winterfell进行测试,出现问题
+
 ```bash
 impacket-getTGT north.sevenkingdoms.local/arya.stark:Needle
 ```
+
 ```bash
 Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
 [*] Saving ticket in arya.stark.ccache
 ```
+
 ```bash
 export KRB5CCNAME=arya.stark.ccache
 ```
+
 作者也不知道为什么kerberos不能在具有完整 FQDN 的 winterfell上运行，但是只需设置目标为 winterfell 而不是 winterfell.north.sevenkingdoms.loca就可以了
-```bash                   
+
+```bash
 impacket-smbclient -k @winterfell.north.sevenkingdoms.local
 
 Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
 
 [-] SMB SessionError: STATUS_MORE_PROCESSING_REQUIRED({Still Busy} The specified I/O request packet (IRP) cannot be disposed of because the I/O operation is not complete.)
 ```
+
 ```bash
 impacket-smbclient -k @winterfell          
 Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
@@ -208,7 +243,9 @@ drw-rw-rw-          0  Wed May 31 02:08:31 2023 ..
 drw-rw-rw-          0  Wed May 31 02:08:31 2023 north.sevenkingdoms.local
 # 
 ```
+
 ### Namp
+
 nmap会在扫描目标之前执行ping,如果目标不响应ping,它将被忽略
 
 确保我们不会遗漏TCP上任何内容的方法可能是使用以下选项进行扫描：
@@ -216,11 +253,13 @@ nmap会在扫描目标之前执行ping,如果目标不响应ping,它将被忽略
 ```bash
 nmap -Pn -p- -sC -sV -oA full_scan_goad 192.168.56.10-12,22-23
 ```
+
 * Pn 不ping 直接扫描提供的全部IP
 * p- 扫描全部65535个端口
 * sC 执行侦查脚本
 * sV 遍历版本
 * oA 以三种形式输出结果 (nmap classic, grep format, xml format)
+
 ```bash
 # Nmap 7.93 scan initiated Fri Jun  2 05:50:26 2023 as: nmap -Pn -p- -sC -sV -oA full_scan_goad 192.168.56.10-12,22-23
 Nmap scan report for sevenkingdoms.local (192.168.56.10)
