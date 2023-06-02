@@ -16,7 +16,7 @@ GOAD域渗透靶场,应该是目前最好的靶场,我曾多次在HTB靶机上�
 
 * [KALI安装篇(可选)](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part1-Install/KALI-Install.md)
 
-* [GOAD侦查和扫描](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part1-Scan/GOAD-Scan.md)
+* [GOAD侦查和扫描](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part2-Scan/GOAD-Scan.md)
 
 ## 参考
 
