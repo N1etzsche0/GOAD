@@ -61,7 +61,9 @@ ansible-playbook main.yml
 
 ### 测试与备份
 
-使用socks代理,也可以参考[KALI安装篇](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part1-Install/KALI-Install.md)搭建KALI攻击机进行测试
+推荐参照[KALI安装篇](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part1-Install/KALI-Install.md)搭建攻击机进行攻击,简单方便
+
+在使用socks代理,进行nmap扫描时会有数据包丢失情况
 
 服务器端启动chisel服务端
 
@@ -101,12 +103,16 @@ ubuntu@ctf:~$vagrant snapshot save initial-setup
 
 ### 失败经验
 
-在服务器上按照[官方文档](https://github.com/Orange-Cyberdefense/GOAD)中的用docker创建并运行ansible,总是会停止在某个阶段,原因未知
+在服务器上按照[官方文档](https://github.com/Orange-Cyberdefense/GOAD)中的,用docker创建并运行ansible,总是会停止在某个阶段,原因未知
 
 ```bash
 sudo docker build -t goadansible .
 sudo docker run -ti --rm --network host -h goadansible -v $(pwd):/goad -w /goad/ansible goadansible ansible-playbook -i ../ad/sevenkingdoms.local/inventory main.yml
 ```
+
+我在Ubuntu上搭建openvpn访问GOAD靶场失败
+
+有此想法的,可以参考GOAD作者在**proxmox**搭建GOAD的[文章](https://mayfly277.github.io/posts/GOAD-on-proxmox-part1-install/)
 
 ## 失败案例
 
