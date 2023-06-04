@@ -1,0 +1,16 @@
+sql_svc
+jeor.mormont
+samwell.tarly
+jon.snow
+hodor
+rickon.stark
+brandon.stark
+sansa.stark
+robb.stark
+catelyn.stark
+eddard.stark
+arya.stark
+krbtgt
+vagrant
+Guest
+Administrator

