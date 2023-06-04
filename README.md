@@ -18,6 +18,10 @@ GOAD域渗透靶场,应该是目前最好的靶场,我曾多次在HTB靶机上�
 
 * [GOAD侦查和扫描](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part2-Scan/GOAD-Scan.md)
 
+* [GOAD寻找用户](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part2-Find-User/GOAD-Find-User.md)
+
+
+
 ## 参考
 
 <https://www.qusec.cn/posts/G0AD/>
