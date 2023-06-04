@@ -506,7 +506,7 @@ NORTH\sql_svc
 
 
 ## 匿名枚举 DC
----
+
 Winterfell域控制器允许匿名连接,这就是我们可以列出域用户和组的原因
 
 但是现在几乎不会发生这种类型的配置(相反,在用户描述中使用密码经常发生x)
@@ -798,7 +798,7 @@ SMB         192.168.56.12   445    MEEREEN          essos.local\Administrator   
 
 
 ## 列出共享的Guest权限
----
+
 查看访客对smb共享的访问
 
 使用CME
