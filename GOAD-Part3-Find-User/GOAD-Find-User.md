@@ -899,8 +899,9 @@ python3 CVE-2022-33679.py north.sevenkingdoms.local/brandon.stark 192.168.56.11
 Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
 
 [*] Getting TGT - Retrieving AS-REP
-[-] [Errno Connection error (north.sevenkingdoms.local:88)] [Errno -3] Temporary failure in name resolution
+[-]  RC4 is not supported
 ```
+没成功
 ### Password Spray密码喷洒
 
 使用CME
