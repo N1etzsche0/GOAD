@@ -2,13 +2,13 @@
 
 ## 域渗透的重要性
 
-因为OSCP考试的改革,域渗透部分占到40分,所以域渗透重要性不言而喻
+因为OSCP考试的改革，域渗透部分占到40分，所以域渗透重要性不言而喻
 
-而针对域渗透,最好的方法就是多加练习!
+而针对域渗透，最好的方法就是多加练习!
 
-GOAD域渗透靶场,应该是目前最好的靶场,我曾多次在HTB靶机上看到相似部分
+GOAD域渗透靶场，应该是目前最好的靶场，我曾多次在HTB靶机上看到相似部分
 
-计划在暑假结束前打通GOAD靶场,对域渗透有个清晰的认识
+计划在暑假结束前打通GOAD靶场，对域渗透有个清晰的认识
 
 ## 导航
 
@@ -20,7 +20,7 @@ GOAD域渗透靶场,应该是目前最好的靶场,我曾多次在HTB靶机上�
 
 * [GOAD寻找用户](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part3-Find-User/GOAD-Find-User.md)
 
-
+* [GOAD用户枚举](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part4-Enumeration-User/GOAD-enumeration-user.md)
 
 ## 参考
 

@@ -976,7 +976,7 @@ SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\Gu
 SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\Administrator                  badpwdcount: 3 desc: Built-in account for administering the computer/domain
 ```
 现在获得了三对凭据：
-* samwell.tarly:Heartsbane(用户描述)
-* brandon.stark:iseedeadpeople(作为责备)
-* hodor:hodor(密码喷雾)
+* north.sevenkingdoms.local\samwell.tarly:Heartsbane(用户描述)
+* north.sevenkingdoms.local\brandon.stark:iseedeadpeople(作为责备)
+* north.sevenkingdoms.local\hodor:hodor(密码喷雾)
 * ~~vagrant:vagrant(密码喷雾)~~
