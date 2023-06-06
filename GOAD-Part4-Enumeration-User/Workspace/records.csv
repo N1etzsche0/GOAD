@@ -1,0 +1,6 @@
+type,name,value
+A,winterfell,192.168.56.11
+A,DomainDnsZones,192.168.56.11
+?,castelblack,?
+NS,@,winterfell.north.sevenkingdoms.local.
+A,@,192.168.56.11

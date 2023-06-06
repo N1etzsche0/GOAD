@@ -260,7 +260,9 @@ nmap -Pn -p- -sC -sV -oA full_scan_goad 192.168.56.10-12,22-23
 * sV 遍历版本
 * oA 以三种形式输出结果 (nmap classic, grep format, xml format)
 
-```bash
+<details>
+<summary>展开查看</summary>
+<pre><code class="bash">
 # Nmap 7.93 scan initiated Fri Jun  2 05:50:26 2023 as: nmap -Pn -p- -sC -sV -oA full_scan_goad 192.168.56.10-12,22-23
 Nmap scan report for sevenkingdoms.local (192.168.56.10)
 Host is up (0.0023s latency).
@@ -677,4 +679,7 @@ Post-scan script results:
 |_    192.168.56.23 (braavos.essos.local)
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 # Nmap done at Fri Jun  2 06:00:41 2023 -- 5 IP addresses (5 hosts up) scanned in 615.07 seconds
-```
+
+</code></pre>
+</details>
+

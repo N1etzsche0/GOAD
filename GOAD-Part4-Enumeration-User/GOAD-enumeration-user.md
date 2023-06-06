@@ -465,3 +465,30 @@ SMB         192.168.56.10   445    KINGSLANDING     NETLOGON        READ        
 SMB         192.168.56.10   445    KINGSLANDING     SYSVOL          READ            Logon server share 
 </code></pre>
 </details>
+
+## DNS 转储
+
+[Active Directory 集成 DNS 转储工具](https://github.com/dirkjanm/adidnsdump)
+>默认情况下，Active Directory 中的任何用户都可以枚举域或林 DNS 区域中的所有 DNS 记录，类似于区域传输。此工具启用区域中所有 DNS 记录的枚举和导出，用于内部网络的侦察目的
+
+```bash
+adidnsdump -u 'north.sevenkingdoms.local\jon.snow' -p 'iknownothing' winterfell.north.sevenkingdoms.local
+```
+```bash
+[-] Connecting to host...
+[-] Binding to host
+[+] Bind OK
+[-] Querying zone for records
+[+] Found 5 records
+```
+```bash
+cat records.csv
+```
+```bash
+type,name,value
+A,winterfell,192.168.56.11
+A,DomainDnsZones,192.168.56.11
+?,castelblack,?
+NS,@,winterfell.north.sevenkingdoms.local.
+A,@,192.168.56.11
+```
