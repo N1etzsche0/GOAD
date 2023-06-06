@@ -977,6 +977,6 @@ SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\Ad
 ```
 现在获得了三对凭据：
 * north.sevenkingdoms.local\samwell.tarly:Heartsbane(用户描述)
-* north.sevenkingdoms.local\brandon.stark:iseedeadpeople(作为责备)
+* north.sevenkingdoms.local\brandon.stark:iseedeadpeople(AS-REP Roasting)
 * north.sevenkingdoms.local\hodor:hodor(密码喷雾)
 * ~~vagrant:vagrant(密码喷雾)~~
