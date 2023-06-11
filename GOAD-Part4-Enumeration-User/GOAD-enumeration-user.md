@@ -499,12 +499,112 @@ A,@,192.168.56.11
 
 Linux环境,直接用python脚本:
 
-https://github.com/fox-it/BloodHound.py
+<https://github.com/fox-it/BloodHound.py>
 
 Windows环境,可以用:
 
-https://github.com/BloodHoundAD/SharpHound
+<https://github.com/BloodHoundAD/SharpHound>
 
 RustHound支持ADCS收集:
 
-https://github.com/OPENCYBER-FR/RustHound
+<https://github.com/OPENCYBER-FR/RustHound>
+
+### bloodhound-python
+
+```bash
+bloodhound-python --zip -c All -d north.sevenkingdoms.local -u brandon.stark -p iseedeadpeople -dc winterfell.north.sevenkingdoms.local -ns 192.168.56.11
+```
+```bash
+INFO: Found AD domain: north.sevenkingdoms.local
+WARNING: Could not find a global catalog server, assuming the primary DC has this role
+If this gives errors, either specify a hostname with -gc or disable gc resolution with --disable-autogc
+INFO: Getting TGT for user
+INFO: Connecting to LDAP server: winterfell.north.sevenkingdoms.local
+INFO: Found 1 domains
+INFO: Found 2 domains in the forest
+INFO: Found 2 computers
+INFO: Connecting to LDAP server: winterfell.north.sevenkingdoms.local
+INFO: Connecting to GC LDAP server: winterfell.north.sevenkingdoms.local
+INFO: Found 17 users
+INFO: Found 51 groups
+INFO: Found 4 gpos
+INFO: Found 2 ous
+INFO: Found 19 containers
+INFO: Found 1 trusts
+INFO: Starting computer enumeration with 10 workers
+INFO: Querying computer: castelblack.north.sevenkingdoms.local
+INFO: Querying computer: winterfell.north.sevenkingdoms.local
+INFO: Done in 00M 02S
+INFO: Compressing output into 20230611003939_bloodhound.zip
+```
+```bash
+bloodhound-python --zip -c All -d sevenkingdoms.local -u brandon.stark@north.sevenkingdoms.local -p iseedeadpeople -dc kingslanding.sevenkingdoms.local -ns 192.168.56.11
+```
+```bash
+INFO: Found AD domain: sevenkingdoms.local
+INFO: Getting TGT for user
+INFO: Connecting to LDAP server: kingslanding.sevenkingdoms.local
+INFO: Found 1 domains
+INFO: Found 2 domains in the forest
+INFO: Found 1 computers
+INFO: Connecting to LDAP server: kingslanding.sevenkingdoms.local
+INFO: Found 16 users
+INFO: Found 59 groups
+INFO: Found 3 gpos
+INFO: Found 10 ous
+INFO: Found 19 containers
+INFO: Found 2 trusts
+INFO: Starting computer enumeration with 10 workers
+INFO: Querying computer: kingslanding.sevenkingdoms.local
+INFO: Done in 00M 02S
+INFO: Compressing output into 20230611004030_bloodhound.zip
+```
+```bash
+bloodhound-python --zip -c All -d essos.local -u brandon.stark@north.sevenkingdoms.local -p iseedeadpeople -dc meereen.essos.local -ns 192.168.56.12 --auth-method ntlm
+```
+```bash
+INFO: Found AD domain: essos.local
+INFO: Connecting to LDAP server: meereen.essos.local
+INFO: Found 1 domains
+INFO: Found 1 domains in the forest
+INFO: Found 2 computers
+INFO: Connecting to LDAP server: meereen.essos.local
+INFO: Found 11 users
+INFO: Found 57 groups
+INFO: Found 3 gpos
+INFO: Found 2 ous
+INFO: Found 19 containers
+INFO: Found 1 trusts
+INFO: Starting computer enumeration with 10 workers
+INFO: Querying computer: braavos.essos.local
+INFO: Querying computer: meereen.essos.local
+INFO: Done in 00M 02S
+INFO: Compressing output into 20230611012109_bloodhound.zip
+```
+
+
+不添加-ns参数,dns解析不到我们在/etc/hosts设定的ip地址
+*   -ns 名称服务器,--nameserver 名称服务,用于查询的备用名称服务器
+
+使用Kerberos协议,报错:
+```bash
+INFO: Found AD domain: essos.local
+INFO: Getting TGT for user
+Traceback (most recent call last):
+  File "/home/joker/.local/bin//bloodhound-python", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/joker/.local/lib/python3.11/site-packages/bloodhound/__init__.py", line 332, in main
+    auth.get_tgt()
+  File "/home/joker/.local/lib/python3.11/site-packages/bloodhound/ad/authentication.py", line 214, in get_tgt
+    tgs, cipher, _, sessionkey = getKerberosTGS(servername, self.domain, self.kdc,
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/impacket/krb5/kerberosv5.py", line 438, in getKerberosTGS
+    r = sendReceive(message, domain, kdcHost)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/impacket/krb5/kerberosv5.py", line 91, in sendReceive
+    raise krbError
+impacket.krb5.kerberosv5.KerberosError: Kerberos SessionError: KRB_AP_ERR_BAD_INTEGRITY(Integrity check on decrypted field failed)
+```
+所以添加参数--auth-method ntml
+* --auth-method {auto,ntlm,kerberos} 身份验证方法。强制使用Kerberos或NTLM，或者使用自动模式，在Kerberos失败时使用NTLM
