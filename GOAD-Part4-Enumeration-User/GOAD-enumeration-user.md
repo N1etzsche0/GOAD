@@ -139,7 +139,7 @@ kerberos的简化认证认证过程如下图
 
 ### SPN简介
 SPN简介:
-> SPN(ServicePrincipal Names)服务主体名称，是服务实例(比如：HTTP、MSSQL、MySQL等服务)的唯一标识符。
+> SPN(ServicePrincipal Names)服务主体名称，是服务实例(比如：HTTP、MSSQL、MySQL等服务)的唯一标识符
 > SPN是服务器上所运行服务的唯一标识，每个使用Kerberos的服务都需要一个SPN
 
 > SPN分为两种，一种注册在AD上机器帐户(Computers)下，另一种注册在域用户帐户(Users)下
@@ -171,7 +171,7 @@ serviceclass/host:port/servicename
 
 >或者用于委派攻击(服务账号大多都会被设置委派，如果是非约束委派，则获取服务账号的口令后，可直接获取域管理员权限)
 
-* 在活动目录中，我们经常会看到设置了 SPN 的用户。
+* 在活动目录中，我们经常会看到设置了 SPN 的用户
 
 使用impacket
 ```bash
@@ -469,7 +469,7 @@ SMB         192.168.56.10   445    KINGSLANDING     SYSVOL          READ        
 ## DNS 转储
 
 [Active Directory 集成 DNS 转储工具](https://github.com/dirkjanm/adidnsdump)
->默认情况下，Active Directory 中的任何用户都可以枚举域或林 DNS 区域中的所有 DNS 记录，类似于区域传输。此工具启用区域中所有 DNS 记录的枚举和导出，用于内部网络的侦察目的
+>默认情况下，Active Directory 中的任何用户都可以枚举域或林 DNS 区域中的所有 DNS 记录，类似于区域传输,此工具启用区域中所有 DNS 记录的枚举和导出，用于内部网络的侦察目的
 
 ```bash
 adidnsdump -u 'north.sevenkingdoms.local\jon.snow' -p 'iknownothing' winterfell.north.sevenkingdoms.local
@@ -492,3 +492,19 @@ A,DomainDnsZones,192.168.56.11
 NS,@,winterfell.north.sevenkingdoms.local.
 A,@,192.168.56.11
 ```
+
+## Bloodhound
+* Boodhound 是活动目录渗透测试的最佳工具之一,此工具将帮助您找到破解 AD 的所有路径，是您武器库中的必备工具！
+* 要启动 bloodhound，您首先需要从不同的域中检索所有数据
+
+Linux环境,直接用python脚本:
+
+https://github.com/fox-it/BloodHound.py
+
+Windows环境,可以用:
+
+https://github.com/BloodHoundAD/SharpHound
+
+RustHound支持ADCS收集:
+
+https://github.com/OPENCYBER-FR/RustHound
