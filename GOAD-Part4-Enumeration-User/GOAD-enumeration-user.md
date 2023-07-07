@@ -117,7 +117,7 @@ distinguishedName: CN=maester.pycelle,OU=Crownlands,DC=sevenkingdoms,DC=local
 
 >它旨在通过使用密钥加密技术为客户端/服务器应用程序提供强身份验证
 
->在Kerberos协议中主要是有三个角色的存在：
+>在Kerberos协议中主要是有三个角色的存在:
 >1. 访问服务的Client(以下表述为Client 或者用户)
 >2. 提供服务的Server(以下表述为服务)
 >3. KDC(Key Distribution Center)密钥分发中心 kerberos 测试工具介绍
@@ -126,7 +126,7 @@ distinguishedName: CN=maester.pycelle,OU=Crownlands,DC=sevenkingdoms,DC=local
 
 kerberos的简化认证认证过程如下图
 
-![kerberos](/GOAD-Part4-Enumeration-User/imges/1.png)
+![kerberos](/GOAD-Part4-Enumeration-User/imges/kerberos.png)
 
 
 1. AS_REQ: Client向KDC发起AS_REQ,请求凭据是Client hash加密的时间戳
@@ -139,7 +139,7 @@ kerberos的简化认证认证过程如下图
 
 ### SPN简介
 SPN简介:
-> SPN(ServicePrincipal Names)服务主体名称，是服务实例(比如：HTTP、MSSQL、MySQL等服务)的唯一标识符
+> SPN(ServicePrincipal Names)服务主体名称，是服务实例(比如:HTTP、MSSQL、MySQL等服务)的唯一标识符
 > SPN是服务器上所运行服务的唯一标识，每个使用Kerberos的服务都需要一个SPN
 
 > SPN分为两种，一种注册在AD上机器帐户(Computers)下，另一种注册在域用户帐户(Users)下
@@ -156,7 +156,7 @@ serviceclass/host:port/servicename
 2. host有两种形式，FQDN和NetBIOS名，例如server01.test.com和server01
 3. 如果服务运行在默认端口上，则端口号(port)可以省略
 
-**kerberoasting：**
+**kerberoasting:**
 >通过SPN发现服务(比如MSSQL)
 
 >具有域内普通用户权限
@@ -608,3 +608,40 @@ impacket.krb5.kerberosv5.KerberosError: Kerberos SessionError: KRB_AP_ERR_BAD_IN
 ```
 所以添加参数--auth-method ntml
 * --auth-method {auto,ntlm,kerberos} 身份验证方法。强制使用Kerberos或NTLM，或者使用自动模式，在Kerberos失败时使用NTLM
+
+### BloodHound使用
+
+显示所有的域和主机
+```sql
+MATCH p = (d:Domain)-[r:Contains*1..]->(n:Computer) RETURN p
+```
+![BloodHound1](/GOAD-Part4-Enumeration-User/imges/BloodHound1.png)
+显示所有用户
+```sql
+MATCH p = (d:Domain)-[r:Contains*1..]->(n:User) RETURN p
+```
+![BloodHound2](/GOAD-Part4-Enumeration-User/imges/BloodHound2.png)
+domain/group/user之间的映射
+```sql
+MATCH q=(d:Domain)-[r:Contains*1..]->(n:Group)<-[s:MemberOf]-(u:User) RETURN q
+```
+![BloodHound3](/GOAD-Part4-Enumeration-User/imges/BloodHound3.png)
+用户ACL
+```sql
+MATCH p=(u:User)-[r1]->(n) WHERE r1.isacl=true and not tolower(u.name) contains 'vagrant' RETURN p
+```
+![BloodHound4](/GOAD-Part4-Enumeration-User/imges/BloodHound4.png)
+更多参考:
+
+[BloodHound Cypher Cheatsheet](https://hausec.com/2019/09/09/bloodhound-cypher-cheatsheet/)
+
+[BloodHound](https://en.hackndo.com/bloodhound/)
+
+### SharpBloud(Win)[待补充]
+### AutoBloody[待补充]
+### RustHound
+收集ADCS
+```bash
+rusthound -d north.sevenkingdoms.local -u 'brandon.stark' -p 'iseedeadpeople' -o ./north.sevenkingdoms.local --adcs -z
+```
+bloodhound-python --zip -c All -d north.sevenkingdoms.local -u brandon.stark -p iseedeadpeople -dc winterfell.north.sevenkingdoms.local -ns 192.168.56.11
