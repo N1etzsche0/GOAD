@@ -1,7 +1,7 @@
 # GOAD 用户枚举
 ## 列出用户
 * 当您在活动目录上获得一个帐户时，要做的第一件事总是**获得完整的用户列表**
-* 一旦你得到它，你就可以在完整的用户列表上进行密码喷射(你经常会发现其他帐户的密码很弱，比如 username=password、SeasonYear!、SocietynameYear! 甚至 123456)
+* 一旦你得到它，你就可以在完整的用户列表上进行密码喷洒(你经常会发现其他帐户的密码很弱，比如 username=password、SeasonYear!、SocietynameYear! 甚至 123456)
 ```bash
 impacket-GetADUsers -all north.sevenkingdoms.local/brandon.stark:iseedeadpeople
 ```
