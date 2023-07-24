@@ -3,7 +3,7 @@
 ## 列出用户
 
 * 当您在活动目录上获得一个帐户时，要做的第一件事总是**获得完整的用户列表**
-* 一旦你得到它，你就可以在完整的用户列表上进行密码喷射(你经常会发现其他帐户的密码很弱，比如 username=password、SeasonYear!、SocietynameYear! 甚至 123456)
+* 一旦你得到它，你就可以在完整的用户列表上进行密码喷洒(你经常会发现其他帐户的密码很弱，比如 username=password、SeasonYear!、SocietynameYear! 甚至 123456)
 
 ```bash
 impacket-GetADUsers -all north.sevenkingdoms.local/brandon.stark:iseedeadpeople
@@ -133,12 +133,9 @@ distinguishedName: CN=maester.pycelle,OU=Crownlands,DC=sevenkingdoms,DC=local
 
 >它旨在通过使用密钥加密技术为客户端/服务器应用程序提供强身份验证
 
-<<<<<<<< HEAD:GOAD-Part4-Enumeration-User/GOAD-Part4-Enumeration-User.md
->在Kerberos协议中主要是有三个角色的存在：
->
-========
 >在Kerberos协议中主要是有三个角色的存在:
 >>>>>>>> 493b3ea0f12ba371d0c5d41d49097cb9872df1af:GOAD-Part4-Enumeration-User/GOAD-Enumeration-User.md
+>
 >1. 访问服务的Client(以下表述为Client 或者用户)
 >2. 提供服务的Server(以下表述为服务)
 >3. KDC(Key Distribution Center)密钥分发中心 kerberos 测试工具介绍
@@ -656,30 +653,40 @@ impacket.krb5.kerberosv5.KerberosError: Kerberos SessionError: KRB_AP_ERR_BAD_IN
 * --auth-method {auto,ntlm,kerberos} 身份验证方法。强制使用Kerberos或NTLM，或者使用自动模式，在Kerberos失败时使用NTLM
 
 ###
+
 ========
+
 * --auth-method {auto,ntlm,kerberos} 身份验证方法。强制使用Kerberos或NTLM，或者使用自动模式，在Kerberos失败时使用NTLM
 
 ### BloodHound使用
 
 显示所有的域和主机
+
 ```sql
 MATCH p = (d:Domain)-[r:Contains*1..]->(n:Computer) RETURN p
 ```
+
 ![BloodHound1](/GOAD-Part4-Enumeration-User/imges/BloodHound1.png)
 显示所有用户
+
 ```sql
 MATCH p = (d:Domain)-[r:Contains*1..]->(n:User) RETURN p
 ```
+
 ![BloodHound2](/GOAD-Part4-Enumeration-User/imges/BloodHound2.png)
 domain/group/user之间的映射
+
 ```sql
 MATCH q=(d:Domain)-[r:Contains*1..]->(n:Group)<-[s:MemberOf]-(u:User) RETURN q
 ```
+
 ![BloodHound3](/GOAD-Part4-Enumeration-User/imges/BloodHound3.png)
 用户ACL
+
 ```sql
 MATCH p=(u:User)-[r1]->(n) WHERE r1.isacl=true and not tolower(u.name) contains 'vagrant' RETURN p
 ```
+
 ![BloodHound4](/GOAD-Part4-Enumeration-User/imges/BloodHound4.png)
 更多参考:
 
@@ -687,12 +694,17 @@ MATCH p=(u:User)-[r1]->(n) WHERE r1.isacl=true and not tolower(u.name) contains 
 
 [BloodHound](https://en.hackndo.com/bloodhound/)
 
-### SharpBloud(Win)[待补充]
+### SharpBloud[Win](待补充)
+
 ### AutoBloody[待补充]
+
 ### RustHound
+
 收集ADCS
+
 ```bash
 rusthound -d north.sevenkingdoms.local -u 'brandon.stark' -p 'iseedeadpeople' -o ./north.sevenkingdoms.local --adcs -z
 ```
+
 bloodhound-python --zip -c All -d north.sevenkingdoms.local -u brandon.stark -p iseedeadpeople -dc winterfell.north.sevenkingdoms.local -ns 192.168.56.11
 >>>>>>>> 493b3ea0f12ba371d0c5d41d49097cb9872df1af:GOAD-Part4-Enumeration-User/GOAD-Enumeration-User.md

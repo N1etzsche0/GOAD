@@ -847,7 +847,7 @@ SMB         192.168.56.22   445    CASTELBLACK      public                      
 [AS-REP Roasting](https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/as-rep-roasting-using-rubeus-and-hashcat)
 >AS-REP烤饼(AS-REP roasting)是一种技术，可以获取选择了**不需要Kerberos预身份验证标志**的用户的密码哈希值
 
->禁用预授权是一种危险的错误配置，攻击者可以简单地查询 KDC 以查找禁用预身份验证的用户，然后为每个用户请求 TGT，然后 TGT 可以从内存中转储并在暴力密码破解攻击中脱机使用，如果密码被破解，则攻击者将拥有域用户的有效凭据
+>禁用预授权是一种危险的错误配置，攻击者可以简单地查询 KDC 以查找禁用预身份验证的用户，然后为每个用户请求 TGT，然后 TGT 可以从内存中转储并在暴力密码破解攻击中脱机使用，如果密码被破解，则攻击者将拥有域用户的有密码铭文
 
 根据之前结果制作[字典](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part3-Find-User/Workspace/north.sevenkingdoms.local-users.txt)
 ```bash
@@ -903,6 +903,8 @@ Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
 ```
 没成功
 ### Password Spray密码喷洒
+
+>密码喷洒属于密码猜测的一种，避免对用户连续测试导致账户被锁定，属于用固定密码尝试所有用户
 
 使用CME
 ```bash
@@ -978,5 +980,5 @@ SMB         192.168.56.11   445    WINTERFELL       north.sevenkingdoms.local\Ad
 现在获得了三对凭据：
 * north.sevenkingdoms.local\samwell.tarly:Heartsbane(用户描述)
 * north.sevenkingdoms.local\brandon.stark:iseedeadpeople(AS-REP Roasting)
-* north.sevenkingdoms.local\hodor:hodor(密码喷雾)
-* ~~vagrant:vagrant(密码喷雾)~~
+* north.sevenkingdoms.local\hodor:hodor(密码喷洒)
+* ~~vagrant:vagrant(密码喷洒)~~
