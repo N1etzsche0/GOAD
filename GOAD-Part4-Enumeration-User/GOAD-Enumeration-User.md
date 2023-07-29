@@ -134,7 +134,7 @@ distinguishedName: CN=maester.pycelle,OU=Crownlands,DC=sevenkingdoms,DC=local
 >它旨在通过使用密钥加密技术为客户端/服务器应用程序提供强身份验证
 
 >在Kerberos协议中主要是有三个角色的存在:
->>>>>>>> 493b3ea0f12ba371d0c5d41d49097cb9872df1af:GOAD-Part4-Enumeration-User/GOAD-Enumeration-User.md
+
 >
 >1. 访问服务的Client(以下表述为Client 或者用户)
 >2. 提供服务的Server(以下表述为服务)
@@ -703,4 +703,3 @@ rusthound -d north.sevenkingdoms.local -u 'brandon.stark' -p 'iseedeadpeople' -o
 ```
 
 bloodhound-python --zip -c All -d north.sevenkingdoms.local -u brandon.stark -p iseedeadpeople -dc winterfell.north.sevenkingdoms.local -ns 192.168.56.11
->>>>>>>> 493b3ea0f12ba371d0c5d41d49097cb9872df1af:GOAD-Part4-Enumeration-User/GOAD-Enumeration-User.md
