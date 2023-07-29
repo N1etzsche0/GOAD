@@ -144,7 +144,7 @@ distinguishedName: CN=maester.pycelle,OU=Crownlands,DC=sevenkingdoms,DC=local
 
 kerberos的简化认证认证过程如下图
 
-![kerberos](/GOAD-Part4-Enumeration-User/imges/kerberos.png)
+![kerberos](/GOAD-Part4-Enumeration-User/images/kerberos.png)
 
 1. AS_REQ: Client向KDC发起AS_REQ,请求凭据是Client hash加密的时间戳
 2. AS_REP: KDC使用Client hash进行解密，如果结果正确就返回用krbtgt hash加密的TGT票据，TGT里面包含PAC,PAC包含Client的sid，Client所在的组
@@ -648,15 +648,11 @@ impacket.krb5.kerberosv5.KerberosError: Kerberos SessionError: KRB_AP_ERR_BAD_IN
 ```
 
 所以添加参数--auth-method ntml
-<<<<<<<< HEAD:GOAD-Part4-Enumeration-User/GOAD-Part4-Enumeration-User.md
+
 
 * --auth-method {auto,ntlm,kerberos} 身份验证方法。强制使用Kerberos或NTLM，或者使用自动模式，在Kerberos失败时使用NTLM
 
-###
 
-========
-
-* --auth-method {auto,ntlm,kerberos} 身份验证方法。强制使用Kerberos或NTLM，或者使用自动模式，在Kerberos失败时使用NTLM
 
 ### BloodHound使用
 
@@ -666,28 +662,28 @@ impacket.krb5.kerberosv5.KerberosError: Kerberos SessionError: KRB_AP_ERR_BAD_IN
 MATCH p = (d:Domain)-[r:Contains*1..]->(n:Computer) RETURN p
 ```
 
-![BloodHound1](/GOAD-Part4-Enumeration-User/imges/BloodHound1.png)
+![BloodHound1](/GOAD-Part4-Enumeration-User/images/BloodHound1.png)
 显示所有用户
 
 ```sql
 MATCH p = (d:Domain)-[r:Contains*1..]->(n:User) RETURN p
 ```
 
-![BloodHound2](/GOAD-Part4-Enumeration-User/imges/BloodHound2.png)
+![BloodHound2](/GOAD-Part4-Enumeration-User/images/BloodHound2.png)
 domain/group/user之间的映射
 
 ```sql
 MATCH q=(d:Domain)-[r:Contains*1..]->(n:Group)<-[s:MemberOf]-(u:User) RETURN q
 ```
 
-![BloodHound3](/GOAD-Part4-Enumeration-User/imges/BloodHound3.png)
+![BloodHound3](/GOAD-Part4-Enumeration-User/images/BloodHound3.png)
 用户ACL
 
 ```sql
 MATCH p=(u:User)-[r1]->(n) WHERE r1.isacl=true and not tolower(u.name) contains 'vagrant' RETURN p
 ```
 
-![BloodHound4](/GOAD-Part4-Enumeration-User/imges/BloodHound4.png)
+![BloodHound4](/GOAD-Part4-Enumeration-User/images/BloodHound4.png)
 更多参考:
 
 [BloodHound Cypher Cheatsheet](https://hausec.com/2019/09/09/bloodhound-cypher-cheatsheet/)
