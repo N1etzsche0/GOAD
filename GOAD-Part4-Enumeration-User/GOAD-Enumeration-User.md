@@ -690,7 +690,7 @@ MATCH p=(u:User)-[r1]->(n) WHERE r1.isacl=true and not tolower(u.name) contains 
 
 [BloodHound](https://en.hackndo.com/bloodhound/)
 
-### SharpBloud[Win](待补充)
+### SharpBloud[待补充]
 
 ### AutoBloody[待补充]
 
@@ -701,5 +701,7 @@ MATCH p=(u:User)-[r1]->(n) WHERE r1.isacl=true and not tolower(u.name) contains 
 ```bash
 rusthound -d north.sevenkingdoms.local -u 'brandon.stark' -p 'iseedeadpeople' -o ./north.sevenkingdoms.local --adcs -z
 ```
-
+```bash
 bloodhound-python --zip -c All -d north.sevenkingdoms.local -u brandon.stark -p iseedeadpeople -dc winterfell.north.sevenkingdoms.local -ns 192.168.56.11
+```
+
