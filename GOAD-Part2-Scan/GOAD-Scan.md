@@ -270,8 +270,8 @@ Not shown: 65511 filtered tcp ports (no-response)
 PORT      STATE SERVICE       VERSION
 53/tcp    open  domain        Simple DNS Plus
 80/tcp    open  http          Microsoft IIS httpd 10.0
-| http-methods: 
-|_  Potentially risky methods: TRACE
+| http-methods:
+|_Potentially risky methods: TRACE
 |_http-server-header: Microsoft-IIS/10.0
 |_http-title: IIS Windows Server
 88/tcp    open  kerberos-sec  Microsoft Windows Kerberos (server time: 2023-06-02 09:54:26Z)
@@ -313,7 +313,7 @@ PORT      STATE SERVICE       VERSION
 |_http-title: Not Found
 |_http-server-header: Microsoft-HTTPAPI/2.0
 5986/tcp  open  ssl/http      Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
-| tls-alpn: 
+| tls-alpn:
 |_  http/1.1
 |_ssl-date: 2023-06-02T09:57:10+00:00; +10s from scanner time.
 |_http-title: Not Found
@@ -335,12 +335,12 @@ Service Info: Host: KINGSLANDING; OS: Windows; CPE: cpe:/o:microsoft:windows
 
 Host script results:
 |_nbstat: NetBIOS name: KINGSLANDING, NetBIOS user: <unknown>, NetBIOS MAC: 080027078d64 (Oracle VirtualBox virtual NIC)
-| smb2-time: 
+| smb2-time:
 |   date: 2023-06-02T09:56:27
 |_  start_date: N/A
-| smb2-security-mode: 
-|   311: 
-|_    Message signing enabled and required
+| smb2-security-mode:
+|   311:
+|_Message signing enabled and required
 |_clock-skew: mean: 9s, deviation: 0s, median: 9s
 
 Nmap scan report for winterfell.north.sevenkingdoms.local (192.168.56.11)
@@ -383,7 +383,7 @@ PORT      STATE SERVICE       VERSION
 | Not valid before: 2023-05-30T06:09:19
 |_Not valid after:  2023-11-29T06:09:19
 |_ssl-date: 2023-06-02T09:57:10+00:00; +10s from scanner time.
-| rdp-ntlm-info: 
+| rdp-ntlm-info:
 |   Target_Name: NORTH
 |   NetBIOS_Domain_Name: NORTH
 |   NetBIOS_Computer_Name: WINTERFELL
@@ -391,14 +391,14 @@ PORT      STATE SERVICE       VERSION
 |   DNS_Computer_Name: winterfell.north.sevenkingdoms.local
 |   DNS_Tree_Name: sevenkingdoms.local
 |   Product_Version: 10.0.17763
-|_  System_Time: 2023-06-02T09:56:28+00:00
+|_System_Time: 2023-06-02T09:56:28+00:00
 5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
 |_http-server-header: Microsoft-HTTPAPI/2.0
 |_http-title: Not Found
 5986/tcp  open  ssl/http      Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
 |_http-title: Not Found
 |_ssl-date: 2023-06-02T09:57:10+00:00; +10s from scanner time.
-| tls-alpn: 
+| tls-alpn:
 |_  http/1.1
 |_http-server-header: Microsoft-HTTPAPI/2.0
 | ssl-cert: Subject: commonName=VAGRANT
@@ -417,11 +417,11 @@ Service Info: Host: WINTERFELL; OS: Windows; CPE: cpe:/o:microsoft:windows
 
 Host script results:
 |_nbstat: NetBIOS name: WINTERFELL, NetBIOS user: <unknown>, NetBIOS MAC: 080027341fc8 (Oracle VirtualBox virtual NIC)
-| smb2-security-mode: 
-|   311: 
+| smb2-security-mode:
+|   311:
 |_    Message signing enabled and required
 |_clock-skew: mean: 9s, deviation: 0s, median: 9s
-| smb2-time: 
+| smb2-time:
 |   date: 2023-06-02T09:56:25
 |_  start_date: N/A
 
@@ -474,9 +474,9 @@ PORT      STATE SERVICE       VERSION
 | Subject Alternative Name: DNS:VAGRANT, DNS:vagrant
 | Not valid before: 2023-05-29T19:36:59
 |_Not valid after:  2026-05-28T19:36:59
-| tls-alpn: 
+| tls-alpn:
 |   h2
-|_  http/1.1
+|_http/1.1
 |_http-title: Not Found
 |_http-server-header: Microsoft-HTTPAPI/2.0
 9389/tcp  open  mc-nmf        .NET Message Framing
@@ -490,26 +490,26 @@ PORT      STATE SERVICE       VERSION
 Service Info: Host: MEEREEN; OS: Windows; CPE: cpe:/o:microsoft:windows
 
 Host script results:
-| smb2-time: 
+| smb2-time:
 |   date: 2023-06-02T09:56:26
-|_  start_date: 2023-06-02T00:35:27
+|_start_date: 2023-06-02T00:35:27
 |_clock-skew: mean: 46m50s, deviation: 2h20m02s, median: 9s
-| smb-os-discovery: 
+| smb-os-discovery:
 |   OS: Windows Server 2016 Standard Evaluation 14393 (Windows Server 2016 Standard Evaluation 6.3)
 |   Computer name: meereen
 |   NetBIOS computer name: MEEREEN\x00
 |   Domain name: essos.local
 |   Forest name: essos.local
 |   FQDN: meereen.essos.local
-|_  System time: 2023-06-02T02:56:29-07:00
+|_System time: 2023-06-02T02:56:29-07:00
 |_nbstat: NetBIOS name: MEEREEN, NetBIOS user: <unknown>, NetBIOS MAC: 080027b0403a (Oracle VirtualBox virtual NIC)
-| smb-security-mode: 
+| smb-security-mode:
 |   account_used: guest
 |   authentication_level: user
 |   challenge_response: supported
-|_  message_signing: required
-| smb2-security-mode: 
-|   311: 
+|_message_signing: required
+| smb2-security-mode:
+|   311:
 |_    Message signing enabled and required
 
 Nmap scan report for castelblack.north.sevenkingdoms.local (192.168.56.22)
@@ -518,15 +518,15 @@ Not shown: 65526 filtered tcp ports (no-response)
 PORT      STATE SERVICE       VERSION
 80/tcp    open  http          Microsoft IIS httpd 10.0
 |_http-server-header: Microsoft-IIS/10.0
-| http-methods: 
+| http-methods:
 |_  Potentially risky methods: TRACE
 |_http-title: Site doesn't have a title (text/html).
 135/tcp   open  msrpc         Microsoft Windows RPC
 139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
 445/tcp   open  microsoft-ds?
 1433/tcp  open  ms-sql-s      Microsoft SQL Server 2019 15.00.2000.00; RTM
-| ms-sql-ntlm-info: 
-|   192.168.56.22:1433: 
+| ms-sql-ntlm-info:
+|   192.168.56.22:1433:
 |     Target_Name: NORTH
 |     NetBIOS_Domain_Name: NORTH
 |     NetBIOS_Computer_Name: CASTELBLACK
@@ -534,15 +534,15 @@ PORT      STATE SERVICE       VERSION
 |     DNS_Computer_Name: castelblack.north.sevenkingdoms.local
 |     DNS_Tree_Name: sevenkingdoms.local
 |_    Product_Version: 10.0.17763
-| ms-sql-info: 
-|   192.168.56.22:1433: 
-|     Version: 
+| ms-sql-info:
+|   192.168.56.22:1433:
+|     Version:
 |       name: Microsoft SQL Server 2019 RTM
 |       number: 15.00.2000.00
 |       Product: Microsoft SQL Server 2019
 |       Service pack level: RTM
 |       Post-SP patches applied: false
-|_    TCP port: 1433
+|_TCP port: 1433
 |_ssl-date: 2023-06-02T09:57:10+00:00; +10s from scanner time.
 | ssl-cert: Subject: commonName=SSL_Self_Signed_Fallback
 | Not valid before: 2023-06-02T00:36:44
@@ -559,8 +559,8 @@ PORT      STATE SERVICE       VERSION
 |_http-server-header: Microsoft-HTTPAPI/2.0
 |_http-title: Not Found
 |_ssl-date: 2023-06-02T09:57:10+00:00; +10s from scanner time.
-| tls-alpn: 
-|_  http/1.1
+| tls-alpn:
+|_http/1.1
 | ssl-cert: Subject: commonName=VAGRANT
 | Subject Alternative Name: DNS:VAGRANT, DNS:vagrant
 | Not valid before: 2023-05-29T19:41:29
@@ -569,13 +569,13 @@ PORT      STATE SERVICE       VERSION
 Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
 
 Host script results:
-| smb2-time: 
+| smb2-time:
 |   date: 2023-06-02T09:56:29
-|_  start_date: N/A
+|_start_date: N/A
 |_nbstat: NetBIOS name: CASTELBLACK, NetBIOS user: <unknown>, NetBIOS MAC: 080027415a28 (Oracle VirtualBox virtual NIC)
 |_clock-skew: mean: 9s, deviation: 0s, median: 9s
-| smb2-security-mode: 
-|   311: 
+| smb2-security-mode:
+|   311:
 |_    Message signing enabled but not required
 
 Nmap scan report for braavos.essos.local (192.168.56.23)
@@ -585,8 +585,8 @@ PORT      STATE SERVICE       VERSION
 80/tcp    open  http          Microsoft IIS httpd 10.0
 |_http-title: IIS Windows Server
 |_http-server-header: Microsoft-IIS/10.0
-| http-methods: 
-|_  Potentially risky methods: TRACE
+| http-methods:
+|_Potentially risky methods: TRACE
 135/tcp   open  msrpc         Microsoft Windows RPC
 139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
 445/tcp   open  microsoft-ds  Windows Server 2016 Standard Evaluation 14393 microsoft-ds
@@ -595,30 +595,30 @@ PORT      STATE SERVICE       VERSION
 | ssl-cert: Subject: commonName=SSL_Self_Signed_Fallback
 | Not valid before: 2023-06-02T00:37:20
 |_Not valid after:  2053-06-02T00:37:20
-| ms-sql-info: 
-|   192.168.56.23:1433: 
-|     Version: 
+| ms-sql-info:
+|   192.168.56.23:1433:
+|     Version:
 |       name: Microsoft SQL Server 2019 RTM
 |       number: 15.00.2000.00
 |       Product: Microsoft SQL Server 2019
 |       Service pack level: RTM
 |       Post-SP patches applied: false
 |_    TCP port: 1433
-| ms-sql-ntlm-info: 
-|   192.168.56.23:1433: 
+| ms-sql-ntlm-info:
+|   192.168.56.23:1433:
 |     Target_Name: ESSOS
 |     NetBIOS_Domain_Name: ESSOS
 |     NetBIOS_Computer_Name: BRAAVOS
 |     DNS_Domain_Name: essos.local
 |     DNS_Computer_Name: braavos.essos.local
 |     DNS_Tree_Name: essos.local
-|_    Product_Version: 10.0.14393
+|_Product_Version: 10.0.14393
 3389/tcp  open  ms-wbt-server Microsoft Terminal Services
 | ssl-cert: Subject: commonName=braavos.essos.local
 | Not valid before: 2023-05-30T06:19:19
 |_Not valid after:  2023-11-29T06:19:19
 |_ssl-date: 2023-06-02T10:00:51+00:00; +10s from scanner time.
-| rdp-ntlm-info: 
+| rdp-ntlm-info:
 |   Target_Name: ESSOS
 |   NetBIOS_Domain_Name: ESSOS
 |   NetBIOS_Computer_Name: BRAAVOS
@@ -631,9 +631,9 @@ PORT      STATE SERVICE       VERSION
 |_http-server-header: Microsoft-HTTPAPI/2.0
 |_http-title: Not Found
 5986/tcp  open  ssl/http      Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
-| tls-alpn: 
+| tls-alpn:
 |   h2
-|_  http/1.1
+|_http/1.1
 |_ssl-date: 2023-06-02T10:00:51+00:00; +10s from scanner time.
 | ssl-cert: Subject: commonName=VAGRANT
 | Subject Alternative Name: DNS:VAGRANT, DNS:vagrant
@@ -648,7 +648,7 @@ Service Info: OSs: Windows, Windows Server 2008 R2 - 2012; CPE: cpe:/o:microsoft
 
 Host script results:
 |_clock-skew: mean: 52m39s, deviation: 2h28m29s, median: 9s
-| smb-os-discovery: 
+| smb-os-discovery:
 |   OS: Windows Server 2016 Standard Evaluation 14393 (Windows Server 2016 Standard Evaluation 6.3)
 |   Computer name: braavos
 |   NetBIOS computer name: BRAAVOS\x00
@@ -656,30 +656,30 @@ Host script results:
 |   Forest name: essos.local
 |   FQDN: braavos.essos.local
 |_  System time: 2023-06-02T03:00:08-07:00
-| smb2-security-mode: 
-|   311: 
-|_    Message signing enabled but not required
+| smb2-security-mode:
+|   311:
+|_Message signing enabled but not required
 |_nbstat: NetBIOS name: BRAAVOS, NetBIOS user: <unknown>, NetBIOS MAC: 080027fe0441 (Oracle VirtualBox virtual NIC)
-| smb2-time: 
+| smb2-time:
 |   date: 2023-06-02T10:00:08
-|_  start_date: 2023-06-02T00:37:10
-| smb-security-mode: 
+|_start_date: 2023-06-02T00:37:10
+| smb-security-mode:
 |   account_used: guest
 |   authentication_level: user
 |   challenge_response: supported
 |_  message_signing: disabled (dangerous, but default)
 
 Post-scan script results:
-| clock-skew: 
-|   9s: 
+| clock-skew:
+|   9s:
 |     192.168.56.10 (sevenkingdoms.local)
 |     192.168.56.22 (castelblack.north.sevenkingdoms.local)
 |     192.168.56.11 (winterfell.north.sevenkingdoms.local)
 |     192.168.56.12 (essos.local)
 |_    192.168.56.23 (braavos.essos.local)
-Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Service detection performed. Please report any incorrect results at <https://nmap.org/submit/> .
+
 # Nmap done at Fri Jun  2 06:00:41 2023 -- 5 IP addresses (5 hosts up) scanned in 615.07 seconds
 
 </code></pre>
 </details>
-

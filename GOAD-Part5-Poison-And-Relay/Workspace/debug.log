@@ -1,0 +1,32 @@
+INFO Initializing database ./donpapi.db
+INFO Loaded 1 targets
+INFO [192.168.56.22] [+] [94mCASTELBLACK[0m (domain:north.sevenkingdoms.local) (Windows 10.0 Build 17763) [SMB Signing Disabled]
+INFO host: \\192.168.56.106, user: robb.stark, active:  8263, idle:  8263
+INFO Adding connected user robb.stark from \\192.168.56.106
+INFO host: \\192.168.56.106, user: eddard.stark, active:  8206, idle:     0
+INFO Adding connected user eddard.stark from \\192.168.56.106
+INFO [192.168.56.22] [+] Found user [94m.NET v2.0[0m
+INFO [192.168.56.22] [+] Found user [94m.NET v2.0 Classic[0m
+INFO [192.168.56.22] [+] Found user [94m.NET v4.5[0m
+INFO [192.168.56.22] [+] Found user [94m.NET v4.5 Classic[0m
+INFO [192.168.56.22] [+] Found user [94mAll Users[0m
+INFO [192.168.56.22] [+] Found user [94mClassic .NET AppPool[0m
+INFO [192.168.56.22] [+] Found user [94mDefault[0m
+INFO [192.168.56.22] [+] Found user [94mDefault User[0m
+INFO [192.168.56.22] [+] Found user [94mjon.snow[0m
+INFO [192.168.56.22] [+] Found user [94mPublic[0m
+INFO [192.168.56.22] [+] Found user [94mrobb.stark[0m
+INFO [192.168.56.22] [+] Found user [94msql_svc[0m
+INFO [192.168.56.22] [+] Found user [94mvagrant[0m
+INFO [192.168.56.22] [94m [+] Dumping LSA Secrets[0m
+INFO [192.168.56.22] [94m [+] Dumping SAM Secrets[0m
+INFO [192.168.56.22] [94m[+] Gathering DPAPI Secret blobs on the target[0m
+INFO [192.168.56.22] [94m[+] Gathering Wifi Keys[0m
+INFO [192.168.56.22] [94m[+] Gathering Vaults[0m
+INFO [192.168.56.22] [94m[+] Gathering Certificates Secrets [0m
+INFO [192.168.56.22] [94m[+] Gathering Chrome Secrets [0m
+INFO [192.168.56.22] [94m[+] Gathering MSEdge Secrets [0m
+INFO [192.168.56.22] [94m[+] Gathering Mozilla Secrets [0m
+INFO [192.168.56.22] [94m[+] Gathering mRemoteNG Secrets [0m
+INFO [192.168.56.22] [94m[+] Gathering VNC Passwords[0m
+INFO [192.168.56.22] [94m[+] Gathering Recent Files and Desktop Files [0m
