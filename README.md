@@ -24,6 +24,8 @@ GOAD域渗透靶场，应该是目前最好的靶场，我曾多次在HTB靶机�
 
 * [GOAD 投毒和中继](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part5-Poison-And-Relay/GOAD-Part5-Poison-And-Relay.md)
 
+* [GOAD 使用用户权限来渗透](https://github.com/N1etzsche0/GOAD/blob/main/GOAD-Part6-Exploit-With-User/GOAD-Part6-Exploit-With-User.md)
+
 ## 参考
 
 <https://www.qusec.cn/posts/G0AD/>

